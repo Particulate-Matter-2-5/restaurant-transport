@@ -58,6 +58,14 @@
                 >
                     View Details
                 </button>
+                <botton
+                    v-if="order.status === 'SUCCESS'"
+                    class="text-center inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300 cursor-pointer"
+                    style="background-color: #ff7f50; color: #ffffff"
+                    @click="reviewOrder(order.id)"
+                >
+                    Review Order
+                </botton>
             </span>
         </div>
         <div class="flex flex-col items-end">
@@ -77,6 +85,7 @@ const role = ref('')
 
 onMounted(async () => {
     const { data: res } = await userApi.getUserByJwt()
+
     role.value = res.data.role
 })
 
@@ -108,4 +117,10 @@ const payAgain = (order) => {
     window.location.href = order.paymentLink
     // console.log('Redirecting to payment link:', order.paymentLink)
 }
+
+const reviewOrder = (id) => {
+    console.log('Reviewing order:', id)
+    window.location.href = `/order/${id}/review`
+}
+
 </script>
