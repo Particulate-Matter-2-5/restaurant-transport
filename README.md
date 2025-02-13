@@ -9,29 +9,27 @@
 ## Download Project
 
 ```
-git clone https://github.com/kirby-cs-org/SE.git
+git clone https://github.com/Particulate-Matter-2-5/restaurant-transport.git
 ```
 
 ## Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
-
 ### Project Setup
 
-```sh
+```bash
 cd frontend
 npm install
 ```
 
 ### Compile and Hot-Reload for Development
 
-```sh
+```bash
 npm run dev
 ```
 
 ### Compile and Minify for Production
 
-```sh
+```bash
 npm run build
 ```
 
@@ -39,24 +37,19 @@ npm run build
 
 ในส่วน Backend (restaurant) ติดตั้ง JDK Version 21
 
-1. Database Name = sa2
-2. Backend Port = 8088
-3. For admin, manually change role in database user_role = 'ADMIN'
-4. Secret Token JWT (for test)
+- Database Name: sa2
+- Backend Port: 8088
+- For admin, manually change role in database user_role = 'ADMIN'
+- สร้าง `.env` ใน restaurant/src/main/resources/
 
-```sh
-ffc0d02ab13cf1b58ac77b6165b17d6654837e8c845e197774754a0efd375560
-```
-
-4. Stripe API Key (for test)
-
-```sh
-sk_test_51Q6VTPBb2nJBY3WlwqNj5Uu2qphozXdNlD8AREPgcMYoFmDlMV7lNmgqBSjOxJKM7mWZ6uvVQR8DUbHFQcWomM2i009gCYwWNX
+```bash
+STRIPE_TEST_KEY=sk_test_51Q6VTPBb2nJBY3WlwqNj5Uu2qphozXdNlD8AREPgcMYoFmDlMV7lNmgqBSjOxJKM7mWZ6uvVQR8DUbHFQcWomM2i009gCYwWNX
+JWT_TEST_KEY=ffc0d02ab13cf1b58ac77b6165b17d6654837e8c845e197774754a0efd375560
 ```
 
 # Features
 
-## อธิบายเส้น API
+## อธิบาย APIs Endpoint
 
 ## Authentication APIs
 
