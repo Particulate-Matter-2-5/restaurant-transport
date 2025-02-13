@@ -1,78 +1,71 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SignupView from '@/views/SignupView.vue'
-import SigninView from '@/views/SigninView.vue'
-import FoodView from '@/views/FoodView.vue'
-import OrderView from '@/views/OrderView.vue'
-import IngredientView from '@/views/IngredientView.vue'
-import ReceiptView from '@/views/ReceiptView.vue'
-import DashboardView from '@/views/DashboardView.vue'
-import CartView from '@/views/CartView.vue'
-import SuccessView from '@/views/SuccessView.vue'
-import CancelView from '@/views/CancelView.vue'
-import AddIngredientsView from '@/views/AddIngredientsView.vue'
-import AddFoodView from '@/views/AddFoodView.vue'
 import authApi from '@/api/authApi'
 
 const routes = [
     {
         path: '/signup',
         name: 'signup',
-        component: SignupView,
+        component: () => import('@/views/SignupView.vue'),
     },
     {
         path: '/signin',
         name: 'signin',
-        component: SigninView,
+        component: () => import('@/views/SigninView.vue'),
     },
     {
         path: '/food',
         name: 'food',
-        component: FoodView,
+        component: () => import('@/views/FoodView.vue'),
     },
     {
         path: '/order',
         name: 'order',
-        component: OrderView,
+        component: () => import('@/views/OrderView.vue'),
     },
     {
         path: '/ingredient',
         name: 'ingredient',
-        component: IngredientView,
+        component: () => import('@/views/IngredientView.vue'),
     },
     {
         path: '/receipt/:id',
         name: 'receipt',
-        component: ReceiptView,
+        component: () => import('@/views/ReceiptView.vue'),
     },
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: DashboardView,
+        component: () => import('@/views/DashboardView.vue'),
     },
     {
         path: '/cart',
         name: 'cart',
-        component: CartView,
+        component: () => import('@/views/CartView.vue'),
     },
     {
         path: '/payment/success',
         name: 'success',
-        component: SuccessView,
+        component: () => import('@/views/SuccessView.vue'),
     },
     {
         path: '/payment/fail',
         name: 'fail',
-        component: CancelView,
+        component: () => import('@/views/CancelView.vue'),
     },
     {
         path: '/addingredients',
         name: 'addingredients',
-        component: AddIngredientsView,
+        component: () => import('@/views/AddIngredientsView.vue'),
     },
     {
         path: '/addfood',
         name: 'addfood',
-        component: AddFoodView,
+        component: () => import('@/views/AddFoodView.vue'),
+    },
+    {
+        path: '/:notFound',
+        name: 'notFound',
+        component: () => import('@/views/NotFound.vue'),
     },
 ]
 
@@ -82,7 +75,7 @@ const router = createRouter({
 })
 
 // navigation guard
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _, next) => {
     try {
         // Allow navigation to 'signin' and 'signup' routes without token validation
         if (to.name === 'signin' || to.name === 'signup') {
