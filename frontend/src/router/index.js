@@ -96,12 +96,14 @@ router.beforeEach(async (to, _, next) => {
 
         // Redirect to 'signin' if the token is not valid
         if (!isAuthenticated) {
+            localStorage.removeItem('token') // ลบ token เก่า
             return next({ name: 'signin' })
         }
 
         next()
     } catch (error) {
         console.error('Error validating token:', error)
+        localStorage.removeItem('token') // ลบ token เมื่อเกิด error
         next({ name: 'signin' })
     }
 })
