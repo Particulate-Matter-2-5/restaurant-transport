@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex justify-between items-center flex-col w-60 h-72 rounded-lg shadow-md bg-white"
+        class="flex justify-between items-center flex-col w-60 h-72 rounded-lg shadow-md bg-white relative"
     >
         <div class="w-full h-3/5 relative">
             <img
@@ -9,6 +9,7 @@
                 class="w-full h-full object-cover rounded-t-lg"
             />
             <div
+                v-show="!showRecipePopup" 
                 class="absolute inset-0 bg-gradient-to-b from-transparent to-white opacity-20 bottom-0"
             ></div>
         </div>
@@ -23,7 +24,6 @@
                 ฿</span
             >
             <div class="flex gap-2">
-                <!-- ปุ่มเพิ่มลงตะกร้า -->
                 <button
                     class="px-2 py-1 rounded-md bg-yellow-300 shadow-md hover:bg-yellow-500 duration-100"
                     :class="{
@@ -40,7 +40,6 @@
                     Add to Cart
                 </button>
 
-                <!-- ปุ่มเปิด recipe -->
                 <button
                     class="px-2 py-1 rounded-md bg-blue-300 shadow-md hover:bg-blue-500 duration-100"
                     @click="showRecipe(props.foodsData.id)"
@@ -50,11 +49,11 @@
             </div>
         </div>
 
-        <!-- Popup Recipe -->
         <RecipePopup
             v-if="showRecipePopup"
             :foodId="selectedFoodId"
             @close="showRecipePopup = false"
+            class="z-50"
         />
     </div>
 </template>
@@ -62,7 +61,7 @@
 <script setup>
 import { ref } from 'vue'
 import { foodsStore } from '@/stores/cart'
-import RecipePopup from '@/components/RecipePopup.vue' // ต้องสร้างไฟล์นี้
+import RecipePopup from '@/components/RecipePopup.vue'
 
 const props = defineProps({
     foodsData: {
@@ -79,7 +78,6 @@ const addToCart = (food) => {
     foodStore.addToCart(food)
 }
 
-// ฟังก์ชันเปิด popup
 const showRecipe = (foodId) => {
     selectedFoodId.value = foodId
     showRecipePopup.value = true

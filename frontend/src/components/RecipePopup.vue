@@ -11,7 +11,7 @@
                     class="flex justify-between"
                 >
                     <span>{{ ingredient.ingredient.name }}</span>
-                    <span>{{ ingredient.qty }} pcs</span>
+                    <span class="text-gray-500">Qty: {{ ingredient.qty }}</span>
                 </li>
             </ul>
             <p v-else>Loading...</p>
@@ -38,7 +38,6 @@ const props = defineProps({
 
 const recipe = ref([])
 
-// โหลด recipe ตาม foodId
 const fetchRecipe = async () => {
     try {
         const { data } = await recipeApi.getRecipeByFoodId(props.foodId)
@@ -48,9 +47,7 @@ const fetchRecipe = async () => {
     }
 }
 
-// โหลดข้อมูลใหม่เมื่อ foodId เปลี่ยน
 watch(() => props.foodId, fetchRecipe)
 
-// โหลดข้อมูลเมื่อ component mount
 onMounted(fetchRecipe)
 </script>
