@@ -36,7 +36,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String jwt = parseJwt(request);
 
         // allow signin signup auth
-        if (request.getRequestURI().equals("/auth/signin") || request.getRequestURI().equals("/auth/signup") || request.getRequestURI().equals("/auth") || request.getRequestURI().contains("/images")) {
+        if (request.getRequestURI().equals("/auth/signin") 
+            || request.getRequestURI().equals("/auth/signup") 
+            || request.getRequestURI().equals("/auth") 
+            || request.getRequestURI().contains("/images")  
+            || request.getRequestURI().startsWith("/v3/api-docs")
+            || request.getRequestURI().startsWith("/swagger-ui")) {
             filterChain.doFilter(request, response); // Proceed without JWT validation
             return;
         }
