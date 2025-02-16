@@ -23,6 +23,11 @@ const routes = [
         component: () => import('@/views/OrderView.vue'),
     },
     {
+        path: '/orderforcook',
+        name: 'orderforcook',
+        component: () => import('@/views/OrderCookView.vue'),
+    },
+    {
         path: '/ingredient',
         name: 'ingredient',
         component: () => import('@/views/IngredientView.vue'),
@@ -31,6 +36,11 @@ const routes = [
         path: '/receipt/:id',
         name: 'receipt',
         component: () => import('@/views/ReceiptView.vue'),
+    },
+    {
+        path: '/receiptforcook/:id',
+        name: 'receiptforcook',
+        component: () => import('@/views/OrderCookRecipeView.vue'),
     },
     {
         path: '/dashboard',

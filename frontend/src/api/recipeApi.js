@@ -6,6 +6,5 @@ const recipeApi = {
         return apiClient.get(`/recipe/${foodId}`)
     },
 }
-
 export default recipeApi
 

@@ -27,7 +27,7 @@
                 }}</span>
             </div>
             <span class="text-md text-gray-500 py-1 ml-1"
-                >By {{ props.order.user.username }}</span
+                >By {{ order.user.username }}</span
             >
             <span class="text-md text-gray-500 ml-1"
                 >Date: {{ order.createdAt.slice(0, 10) }}</span
@@ -75,6 +75,8 @@ import { onMounted, ref } from 'vue'
 
 const role = ref('')
 
+
+
 onMounted(async () => {
     const { data: res } = await userApi.getUserByJwt()
     role.value = res.data.role
@@ -88,7 +90,7 @@ const props = defineProps({
     index: Number,
 })
 
-const emit = defineEmits(['mark-success', 'view-detail'])
+const emit = defineEmits(['mark-success', 'view-detail', 'show-recipe'])
 
 const markOrderSuccess = async (id) => {
     try {

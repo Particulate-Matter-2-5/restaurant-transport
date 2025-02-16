@@ -35,47 +35,50 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String jwt = parseJwt(request);
 
-        // allow signin signup auth
-        if (request.getRequestURI().equals("/auth/signin") 
-            || request.getRequestURI().equals("/auth/signup") 
-            || request.getRequestURI().equals("/auth") 
-            || request.getRequestURI().contains("/images")  
-            || request.getRequestURI().startsWith("/v3/api-docs")
-            || request.getRequestURI().startsWith("/swagger-ui")) {
+        // Allow signin/signup auth
+        if (request.getRequestURI().equals("/auth/signin")
+                || request.getRequestURI().equals("/auth/signup")
+                || request.getRequestURI().equals("/auth")
+                || request.getRequestURI().contains("/images")
+                || request.getRequestURI().startsWith("/v3/api-docs")
+                || request.getRequestURI().startsWith("/swagger-ui")) {
             filterChain.doFilter(request, response); // Proceed without JWT validation
             return;
         }
 
-        // ตรวจสอบว่า JWT มีอยู่และถูกต้องหรือไม่
+        // Validate JWT token
         if (jwt == null || !jwtUtils.validateJwtToken(jwt)) {
             tokenLogger.warn("JWT is missing or invalid.");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-            return; // หาก JWT ไม่มีหรือไม่ถูกต้อง ให้หยุดการประมวลผล
+            return; // Stop processing if the JWT is missing or invalid
         }
 
         try {
             String username = jwtUtils.getUserNameFromJwtToken(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // ดึงบทบาทจาก JWT claims
+            // Extract roles from JWT claims
             List<String> roles = jwtUtils.getRolesFromToken(jwt);
             boolean hasRequiredRole = false;
 
             tokenLogger.info("User {} has roles: {}", username, roles);
             System.out.println("User " + username + " has roles: " + roles);
 
-            // ตรวจสอบ URI ของการร้องขอ
+            // Check the requested URI and assign the required roles
             String requestUri = request.getRequestURI();
 
-            // กำหนดบทบาทที่จำเป็นตาม URI ที่ร้องขอ
-            if (requestUri.matches("/foods|/order|/order_line|/recipe|/receipt|/user|/financial")) {
+            // Determine the required role based on the URI
+            if (requestUri.startsWith("/order") || requestUri.startsWith("/recipe") || requestUri.startsWith("/user")) {
+                hasRequiredRole = roles.contains("COOK");
+            } else if (requestUri.startsWith("/foods") || requestUri.startsWith("/order") || requestUri.startsWith("/order_line")
+                    || requestUri.startsWith("/recipe") || requestUri.startsWith("/receipt") || requestUri.startsWith("/user")
+                    || requestUri.startsWith("/financial")) {
                 hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
-            } else if (requestUri.matches("/foods/.*|/order/.*|/order_line/.*|/recipe/.*|/receipt.*|/user/.*")) {
-                hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
-            } else if (requestUri.equals("/ingredient")) {
+            } else if (requestUri.startsWith("/ingredient")) {
                 hasRequiredRole = roles.contains("ADMIN");
             }
 
+            // Check if the user has the required role
             if (hasRequiredRole) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
