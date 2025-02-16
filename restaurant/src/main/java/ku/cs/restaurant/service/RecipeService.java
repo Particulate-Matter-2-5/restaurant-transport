@@ -4,20 +4,25 @@ import ku.cs.restaurant.dto.recipe.IngredientQtyRequest;
 import ku.cs.restaurant.entity.Food;
 import ku.cs.restaurant.entity.Recipe;
 import ku.cs.restaurant.entity.RecipeKey;
+import ku.cs.restaurant.repository.FoodRepository;
 import ku.cs.restaurant.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final IngredientService ingredientService;
+    private final FoodRepository foodRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, FoodService foodService, IngredientService ingredientService) {
+    public RecipeService(RecipeRepository recipeRepository, FoodRepository foodRepository, IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.ingredientService = ingredientService;
+        this.foodRepository = foodRepository;
     }
 
     public void createRecipe(Recipe recipe) {
@@ -63,5 +68,14 @@ public class RecipeService {
 
     public void deleteRecipe(RecipeKey id) {
         recipeRepository.deleteById(id);
+    }
+
+    public List<Recipe> getRecipeByFoodId(UUID foodId) {
+        Optional<Food> recordOptional = foodRepository.findById(foodId);
+        if (recordOptional.isPresent()) {
+            Food record = recordOptional.get();
+            return recipeRepository.findByFood(record);
+        }
+        return Collections.emptyList();
     }
 }
