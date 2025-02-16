@@ -22,27 +22,48 @@
                 }}
                 ฿</span
             >
-            <button
-                class="px-2 py-1 rounded-md bg-yellow-300 shadow-md hover:bg-yellow-500 duration-100"
-                :class="{
-                    'opacity-20 cursor-not-allowed':
+            <div class="flex gap-2">
+                <!-- ปุ่มเพิ่มลงตะกร้า -->
+                <button
+                    class="px-2 py-1 rounded-md bg-yellow-300 shadow-md hover:bg-yellow-500 duration-100"
+                    :class="{
+                        'opacity-20 cursor-not-allowed':
+                            foodStore.getCartItemCount(props.foodsData.id) >=
+                            props.foodsData.max,
+                    }"
+                    @click="addToCart(props.foodsData)"
+                    :disabled="
                         foodStore.getCartItemCount(props.foodsData.id) >=
-                        props.foodsData.max,
-                }"
-                @click="addToCart(props.foodsData)"
-                :disabled="
-                    foodStore.getCartItemCount(props.foodsData.id) >=
-                    props.foodsData.max
-                "
-            >
-                Add to Cart
-            </button>
+                        props.foodsData.max
+                    "
+                >
+                    Add to Cart
+                </button>
+
+                <!-- ปุ่มเปิด recipe -->
+                <button
+                    class="px-2 py-1 rounded-md bg-blue-300 shadow-md hover:bg-blue-500 duration-100"
+                    @click="showRecipe(props.foodsData.id)"
+                >
+                    Recipe
+                </button>
+            </div>
         </div>
+
+        <!-- Popup Recipe -->
+        <RecipePopup
+            v-if="showRecipePopup"
+            :foodId="selectedFoodId"
+            @close="showRecipePopup = false"
+        />
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { foodsStore } from '@/stores/cart'
+import RecipePopup from '@/components/RecipePopup.vue' // ต้องสร้างไฟล์นี้
+
 const props = defineProps({
     foodsData: {
         type: Object,
@@ -51,9 +72,16 @@ const props = defineProps({
 })
 
 const foodStore = foodsStore()
+const showRecipePopup = ref(false)
+const selectedFoodId = ref(null)
 
 const addToCart = (food) => {
-    console.log(food.max)
     foodStore.addToCart(food)
+}
+
+// ฟังก์ชันเปิด popup
+const showRecipe = (foodId) => {
+    selectedFoodId.value = foodId
+    showRecipePopup.value = true
 }
 </script>
