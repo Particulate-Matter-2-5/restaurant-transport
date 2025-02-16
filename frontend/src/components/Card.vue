@@ -41,6 +41,7 @@
                 </button>
 
                 <button
+                    v-if="role === 'ADMIN'"
                     class="px-2 py-1 rounded-md bg-blue-300 shadow-md hover:bg-blue-500 duration-100"
                     @click="showRecipe(props.foodsData.id)"
                 >
@@ -59,8 +60,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { foodsStore } from '@/stores/cart'
+import userApi from '@/api/userApi'
 import RecipePopup from '@/components/RecipePopup.vue'
 
 const props = defineProps({
@@ -73,6 +75,12 @@ const props = defineProps({
 const foodStore = foodsStore()
 const showRecipePopup = ref(false)
 const selectedFoodId = ref(null)
+const role = ref('')
+
+onMounted(async () => {
+    const { data: res } = await userApi.getUserByJwt()
+    role.value = res.data.role // ตรวจสอบ role จาก API
+})
 
 const addToCart = (food) => {
     foodStore.addToCart(food)
