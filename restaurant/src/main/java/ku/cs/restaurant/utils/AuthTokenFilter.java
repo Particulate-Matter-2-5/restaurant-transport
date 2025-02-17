@@ -35,13 +35,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String jwt = parseJwt(request);
 
-        // Allow signin/signup auth
-        if (request.getRequestURI().equals("/auth/signin")
-                || request.getRequestURI().equals("/auth/signup")
-                || request.getRequestURI().equals("/auth")
-                || request.getRequestURI().contains("/images")
-                || request.getRequestURI().startsWith("/v3/api-docs")
-                || request.getRequestURI().startsWith("/swagger-ui")) {
+        // Allow public URIs (signin/signup, images, Swagger, etc.)
+        if (isPublicUri(request.getRequestURI())) {
             filterChain.doFilter(request, response); // Proceed without JWT validation
             return;
         }
@@ -59,27 +54,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             // Extract roles from JWT claims
             List<String> roles = jwtUtils.getRolesFromToken(jwt);
-            boolean hasRequiredRole = false;
-
             tokenLogger.info("User {} has roles: {}", username, roles);
-            System.out.println("User " + username + " has roles: " + roles);
 
-            // Check the requested URI and assign the required roles
-            String requestUri = request.getRequestURI();
-
-            // Determine the required role based on the URI
-            if (requestUri.startsWith("/order") || requestUri.startsWith("/recipe") || requestUri.startsWith("/user")) {
-                hasRequiredRole = roles.contains("COOK");
-            } else if (requestUri.startsWith("/foods") || requestUri.startsWith("/order") || requestUri.startsWith("/order_line")
-                    || requestUri.startsWith("/recipe") || requestUri.startsWith("/receipt") || requestUri.startsWith("/user")
-                    || requestUri.startsWith("/financial")) {
-                hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
-            } else if (requestUri.startsWith("/ingredient")) {
-                hasRequiredRole = roles.contains("ADMIN");
-            }
-
-            // Check if the user has the required role
-            if (hasRequiredRole) {
+            // Check if the user has the required role for the requested URI
+            if (hasRequiredRoleForUri(request.getRequestURI(), roles)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -100,6 +78,33 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+    // Helper method to check if URI is public
+    private boolean isPublicUri(String requestUri) {
+        return requestUri.equals("/auth/signin")
+                || requestUri.equals("/auth/signup")
+                || requestUri.equals("/auth")
+                || requestUri.contains("/images")
+                || requestUri.startsWith("/v3/api-docs")
+                || requestUri.startsWith("/swagger-ui");
+    }
+
+    // Helper method to check if the user has the required role based on the URI
+    private boolean hasRequiredRoleForUri(String requestUri, List<String> roles) {
+        if (requestUri.startsWith("/order") || requestUri.startsWith("/recipe") || requestUri.startsWith("/user")) {
+            // Allow ADMIN and COOK roles for /order, /recipe, and /user
+            return roles.contains("COOK") || roles.contains("ADMIN");
+        } else if (requestUri.startsWith("/foods") || requestUri.startsWith("/order") || requestUri.startsWith("/order_line")
+                || requestUri.startsWith("/recipe") || requestUri.startsWith("/receipt") || requestUri.startsWith("/user")
+                || requestUri.startsWith("/financial")) {
+            // Allow CUSTOMER and ADMIN roles for these paths
+            return roles.contains("CUSTOMER") || roles.contains("ADMIN");
+        } else if (requestUri.startsWith("/ingredient")) {
+            return roles.contains("ADMIN");
+        }
+        return false; // Default return false if URI does not match any condition
+    }
+
 
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
