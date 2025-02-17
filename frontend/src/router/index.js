@@ -3,6 +3,10 @@ import authApi from '@/api/authApi'
 
 const routes = [
     {
+        path: '/',
+        redirect: '/food',
+    },
+    {
         path: '/signup',
         name: 'signup',
         component: () => import('@/views/SignupView.vue'),
@@ -84,36 +88,49 @@ const router = createRouter({
     routes,
 })
 
+/**
+ * @param {jwt token} token
+ * @returns เวลาที่ token จะหมดอายุ
+ */
+const decodeToken = (token) => {
+    const payload = JSON.parse(atob(token.split('.')[1]))
+    return payload.exp * 1000
+}
+
 // navigation guard
 router.beforeEach(async (to, _, next) => {
     try {
-        // Allow navigation to 'signin' and 'signup' routes without token validation
-        if (to.name === 'signin' || to.name === 'signup') {
+        // path ที่เข้าได้โดยไม่ต้อง validate token
+        if (['signin', 'signup'].includes(to.name)) {
             next()
             return
         }
 
+        // ถ้าไม่มี token ไป signin
         const token = localStorage.getItem('token')
-
-        // Check if the token exists
         if (!token) {
             return next({ name: 'signin' })
         }
 
-        const { data: response } = await authApi.validateToken(token)
-
-        const isAuthenticated = response.success
-
-        // Redirect to 'signin' if the token is not valid
-        if (!isAuthenticated) {
-            localStorage.removeItem('token') // ลบ token เก่า
+        // ถ้า token หมดอายุ ลบ token แล้วไป signin
+        const tokenExpiry = decodeToken(token)
+        if (tokenExpiry < Date.now()) {
+            localStorage.removeItem('token')
             return next({ name: 'signin' })
         }
 
+        // validate token ว่าถูกต้องไหม ถ้าไม่ ลบ token แล้วไป signin
+        const { data: response } = await authApi.validateToken(token)
+        const isAuthenticated = response.success
+        if (!isAuthenticated) {
+            localStorage.removeItem('token')
+            return next({ name: 'signin' })
+        }
+        
         next()
     } catch (error) {
         console.error('Error validating token:', error)
-        localStorage.removeItem('token') // ลบ token เมื่อเกิด error
+        localStorage.removeItem('token')
         next({ name: 'signin' })
     }
 })
