@@ -2,7 +2,6 @@
 import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
 import OrderCard from '@/components/OrderCard.vue'
-import RecipePopup from '@/components/RecipePopup.vue'
 import orderApi from '@/api/orderApi'
 import userApi from '@/api/userApi'
 import router from '@/router'
@@ -69,18 +68,10 @@ const handleOrderSuccess = async (orderId) => {
 }
 
 const handleViewDetail = (orderId) => {
-    router.push({ name: 'receipt', params: { id: orderId } })
+    router.push({ name: 'receiptforcook', params: { id: orderId } })
 }
 
-const handleRecipeClick = (order) => {
-    selectedOrder.value = order
-    showRecipePopup.value = true
-}
 
-const closeRecipePopup = () => {
-    showRecipePopup.value = false
-    selectedOrder.value = null
-}
 </script>
 
 <template>
@@ -106,9 +97,6 @@ const closeRecipePopup = () => {
                     @mark-success="handleOrderSuccess"
                     @view-detail="handleViewDetail"
                 >
-                    <button @click="handleRecipeClick(order)" class="ml-4 px-2 py-1 bg-blue-500 text-white rounded">
-                        Recipe
-                    </button>
                 </OrderCard>
             </section>
         </main>

@@ -12,7 +12,7 @@ const foodList = ref([])
 const recipeList = ref({})
 
 const goBack = () => {
-    router.push('/order')
+    router.push('/orderforcook')
 }
 
 onMounted(async () => {

@@ -73,7 +73,13 @@ const menuItems = [
         label: 'Order',
         icon: 'book',
         path: '/order',
-        role: ['ADMIN', 'CUSTOMER', 'COOK'],
+        role: ['ADMIN', 'CUSTOMER'],
+    },
+    {
+        label: 'To Cook',
+        icon: 'book',
+        path: '/orderforcook',
+        role: ['COOK'],
     },
     {
         label: 'Ingredient',

@@ -1,10 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import authApi from '@/api/authApi'
+import userApi from '@/api/userApi'
 
 const routes = [
     {
         path: '/',
-        redirect: '/food',
+        name: 'home',
+        beforeEnter: async (__, _, next) => {
+            try {
+                const role = await getUserRole()
+                if (role === 'COOK') {
+                    next({ name: 'orderforcook' })
+                } else {
+                    next({ name: 'food' })
+                }
+            } catch (error) {
+                console.error('Error getting user role:', error)
+                next({ name: 'signin' })
+            }
+        },
     },
     {
         path: '/signup',
@@ -77,7 +90,7 @@ const routes = [
         component: () => import('@/views/AddFoodView.vue'),
     },
     {
-        path: '/:notFound',
+        path: '/:pathMatch(.*)*', // Catch-all for undefined routes
         name: 'notFound',
         component: () => import('@/views/NotFound.vue'),
     },
@@ -89,35 +102,49 @@ const router = createRouter({
 })
 
 /**
- * @param {jwt token} token
- * @returns เวลาที่ token จะหมดอายุ
+ * @param {string} token
+ * @returns {number} token expiration time in milliseconds
  */
 const decodeToken = (token) => {
-    const payload = JSON.parse(atob(token.split('.')[1]))
-    return payload.exp * 1000
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]))
+        return payload.exp * 1000
+    } catch (error) {
+        console.error('Error decoding token:', error)
+        return 0
+    }
 }
 
-// navigation guard
+// Get user role from the server
+const getUserRole = async () => {
+    const { data: res } = await userApi.getUserByJwt()
+    return res.data.role
+}
+
+// Navigation guard
 router.beforeEach(async (to, _, next) => {
     try {
-        // path ที่เข้าได้โดยไม่ต้อง validate token
+        // Skip token validation for sign-in and sign-up pages
         if (['signin', 'signup'].includes(to.name)) {
             next()
             return
         }
 
-        // ถ้าไม่มี token ไป signin
         const token = localStorage.getItem('token')
+
+        // If no token, redirect to sign-in page
         if (!token) {
             return next({ name: 'signin' })
         }
 
-        // ถ้า token หมดอายุ ลบ token แล้วไป signin
         const tokenExpiry = decodeToken(token)
+
+        // If token has expired, remove it and redirect to sign-in page
         if (tokenExpiry < Date.now()) {
             localStorage.removeItem('token')
             return next({ name: 'signin' })
         }
+
         next()
     } catch (error) {
         console.error('Error validating token:', error)
@@ -125,5 +152,7 @@ router.beforeEach(async (to, _, next) => {
         next({ name: 'signin' })
     }
 })
+
+
 
 export default router

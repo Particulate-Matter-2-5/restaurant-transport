@@ -54,8 +54,7 @@
                 <button
                     class="px-12 py-2 mt-2 rounded-lg"
                     style="background-color: #f6f6f6; color: #000000"
-                    @click="viewOrderDetail"
-                >
+                    @click="viewOrderDetail">
                     View Details
                 </button>
             </span>
@@ -71,6 +70,7 @@
 <script setup>
 import orderApi from '@/api/orderApi'
 import userApi from '@/api/userApi'
+import router from '@/router'
 import { onMounted, ref } from 'vue'
 
 const role = ref('')
@@ -104,6 +104,10 @@ const markOrderSuccess = async (id) => {
 
 const viewOrderDetail = () => {
     emit('view-detail', props.order.id)
+}
+
+const viewOrderDetailforCook = () => {
+    router.push({ name: 'receiptforcook', params: { id: props.order.id } })
 }
 
 const payAgain = (order) => {
