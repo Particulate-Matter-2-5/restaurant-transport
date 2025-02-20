@@ -119,6 +119,8 @@ const handleViewDetail = (orderId) => {
                         v-for="option in [
                             'PENDING',
                             'COMPLETE',
+                            'DELIVERING',
+                            'DELIVERED',
                             'CANCEL',
                             'SUCCESS',
                             'All Orders',

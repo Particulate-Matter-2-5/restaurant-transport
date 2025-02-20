@@ -45,6 +45,14 @@
                     Mark as Success
                 </button>
                 <button
+                    v-if="order.status === 'COMPLETE' && role === 'COOK'"
+                    class="inline-block w-70 px-10 py-2 mt-2 mr-10 rounded-lg"
+                    style="background-color: #bcf14a; color: #000000"
+                    @click="markOrderDelivering(order.id)"
+                >
+                    Mark as Delivering
+                </button>
+                <button
                     v-if="order.status === 'PENDING'"
                     class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300"
                     @click="payAgain(order)"
@@ -90,12 +98,22 @@ const props = defineProps({
     index: Number,
 })
 
-const emit = defineEmits(['mark-success', 'view-detail', 'show-recipe'])
+const emit = defineEmits(['mark-success', 'view-detail', 'show-recipe','mark-delivering'])
 
 const markOrderSuccess = async (id) => {
     try {
         await orderApi.updateOrderStatus({ id, status: 'SUCCESS' })
         emit('mark-success', id)
+        window.location.reload()
+    } catch (error) {
+        console.error('Error marking order as success:', error)
+    }
+}
+
+const markOrderDelivering = async (id) => {
+    try {
+        await orderApi.updateOrderStatus({ id, status: 'DELIVERING' })
+        emit('mark-delivering', id)
         window.location.reload()
     } catch (error) {
         console.error('Error marking order as success:', error)

@@ -55,16 +55,16 @@ const filteredOrders = computed(() => {
     })
 })
 
-const handleOrderSuccess = async (orderId) => {
-    const order = orders.value.find((o) => o.id === orderId)
-    if (order) {
-        try {
-            await orderApi.createOrder({ ...order, status: 'Success' })
-            order.status = 'Success'
-        } catch (error) {
-            console.error('Error updating order:', error)
-        }
-    }
+const handleOrderDelivering = async (orderId) => {
+    // const order = orders.value.find((o) => o.id === orderId)
+    // if (order) {
+    //     try {
+    //         await orderApi.createOrder({ ...order, status: 'Delivering' })
+    //         order.status = 'Delivering'
+    //     } catch (error) {
+    //         console.error('Error updating order:', error)
+    //     }
+    // }
 }
 
 const handleViewDetail = (orderId) => {
@@ -94,7 +94,7 @@ const handleViewDetail = (orderId) => {
                     :index="i + 1"
                     :key="order.id"
                     :order="order"
-                    @mark-success="handleOrderSuccess"
+                    @mark-delivering="handleOrderDelivering"
                     @view-detail="handleViewDetail"
                 >
                 </OrderCard>

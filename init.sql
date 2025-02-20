@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `o_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `payment_link` text COLLATE utf8mb4_general_ci,
-  `o_status` enum('CANCEL','COMPLETE','PENDING','SUCCESS') COLLATE utf8mb4_general_ci NOT NULL,
+  `o_status` enum('CANCEL','COMPLETE','PENDING','SUCCESS','DELIVERING') COLLATE utf8mb4_general_ci NOT NULL,
   `o_total` double NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   `b_id` varchar(36) COLLATE utf8mb4_general_ci DEFAULT NULL,
