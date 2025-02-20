@@ -109,7 +109,6 @@ router.beforeEach(async (to, _, next) => {
             localStorage.removeItem('token') // ลบ token เก่า
             return next({ name: 'signin' })
         }
-
         next()
     } catch (error) {
         console.error('Error validating token:', error)
