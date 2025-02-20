@@ -17,31 +17,41 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.*;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
+
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
+    private static final Logger tokenLogger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
+    // URI roles mapping
+    private static final Map<String, Set<String>> uriRoleMap = new HashMap<>();
+
+    static {
+        // Define roles required for specific URI prefixes
+        uriRoleMap.put("/order", new HashSet<>(Arrays.asList("COOK", "ADMIN", "CUSTOMER")));
+        uriRoleMap.put("/recipe", new HashSet<>(Arrays.asList("COOK", "ADMIN")));
+        uriRoleMap.put("/user", new HashSet<>(Arrays.asList("COOK", "ADMIN", "CUSTOMER")));
+        uriRoleMap.put("/foods", new HashSet<>(Arrays.asList("CUSTOMER", "ADMIN", "COOK")));
+        uriRoleMap.put("/order_line", new HashSet<>(Arrays.asList("CUSTOMER", "ADMIN", "COOK")));
+        uriRoleMap.put("/receipt", new HashSet<>(Arrays.asList("CUSTOMER", "ADMIN", "COOK")));
+        uriRoleMap.put("/financial", new HashSet<>(Collections.singletonList("ADMIN")));
+        uriRoleMap.put("/ingredient", new HashSet<>(Collections.singletonList("ADMIN")));
+    }
 
     public AuthTokenFilter(UserDetailsService userDetailsService, JwtUtils jwtUtils) {
         this.userDetailsService = userDetailsService;
         this.jwtUtils = jwtUtils;
     }
 
-    private static final Logger tokenLogger = LoggerFactory.getLogger(AuthTokenFilter.class);
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = parseJwt(request);
 
-        // Allow signin/signup auth
-        if (request.getRequestURI().equals("/auth/signin")
-                || request.getRequestURI().equals("/auth/signup")
-                || request.getRequestURI().equals("/auth")
-                || request.getRequestURI().contains("/images")
-                || request.getRequestURI().startsWith("/v3/api-docs")
-                || request.getRequestURI().startsWith("/swagger-ui")) {
+        // Allow public URIs (signin/signup, images, Swagger, etc.)
+        if (isPublicUri(request.getRequestURI())) {
             filterChain.doFilter(request, response); // Proceed without JWT validation
             return;
         }
@@ -59,27 +69,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             // Extract roles from JWT claims
             List<String> roles = jwtUtils.getRolesFromToken(jwt);
-            boolean hasRequiredRole = false;
-
             tokenLogger.info("User {} has roles: {}", username, roles);
-            System.out.println("User " + username + " has roles: " + roles);
 
-            // Check the requested URI and assign the required roles
-            String requestUri = request.getRequestURI();
-
-            // Determine the required role based on the URI
-            if (requestUri.startsWith("/order") || requestUri.startsWith("/recipe") || requestUri.startsWith("/user")) {
-                hasRequiredRole = roles.contains("COOK");
-            } else if (requestUri.startsWith("/foods") || requestUri.startsWith("/order") || requestUri.startsWith("/order_line")
-                    || requestUri.startsWith("/recipe") || requestUri.startsWith("/receipt") || requestUri.startsWith("/user")
-                    || requestUri.startsWith("/financial")) {
-                hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
-            } else if (requestUri.startsWith("/ingredient")) {
-                hasRequiredRole = roles.contains("ADMIN");
-            }
-
-            // Check if the user has the required role
-            if (hasRequiredRole) {
+            // Check if the user has the required role for the requested URI
+            if (hasRequiredRoleForUri(request.getRequestURI(), roles)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -101,12 +94,51 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    // Helper method to check if URI is public (no token required)
+    private boolean isPublicUri(String requestUri) {
+        return requestUri.equals("/auth/signin")
+                || requestUri.equals("/auth/signup")
+                || requestUri.equals("/auth")
+                || requestUri.contains("/images")
+                || requestUri.startsWith("/v3/api-docs")
+                || requestUri.startsWith("/swagger-ui");
+    }
+
+    /**
+     * Check if the user has the required role for the given URI
+     * @param requestUri The requested URI
+     * @param roles List of roles the user has
+     * @return true if the user has the required role for the URI, false otherwise
+     */
+    private boolean hasRequiredRoleForUri(String requestUri, List<String> roles) {
+        // Iterate over the URI role mappings and check the URI
+        for (Map.Entry<String, Set<String>> entry : uriRoleMap.entrySet()) {
+            String pathPrefix = entry.getKey();
+            Set<String> requiredRoles = entry.getValue();
+
+            // If the URI starts with the defined prefix, check if the roles match
+            if (requestUri.startsWith(pathPrefix)) {
+                for (String role : roles) {
+                    if (requiredRoles.contains(role)) {
+                        return true; // Role matches, allow access
+                    }
+                }
+                return false; // No matching role, deny access
+            }
+        }
+
+        return false; // Return false if URI doesn't match any condition
+    }
+
+    // Helper method to parse JWT from the Authorization header
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer "))
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7); // Remove "Bearer " prefix
+        }
 
         return null;
     }
 }
+
