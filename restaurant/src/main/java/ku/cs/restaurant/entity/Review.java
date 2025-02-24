@@ -26,6 +26,9 @@ public class Review {
     @Column(name = "review_date")
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "like_count")
+    private int likeCount = 0;
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private User customer;

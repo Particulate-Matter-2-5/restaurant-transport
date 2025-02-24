@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import ingredientApi from '@/api/ingredientApi'
-import router from '@/router'
+import ingredientApi from '@/api/ingredientApi.js'
+import router from '@/router/index.js'
 
 // Utility function to format the date to dd-mm-yy
 const formatDateToDDMMYY = (dateStr) => {

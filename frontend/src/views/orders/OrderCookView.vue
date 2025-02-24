@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import OrderCard from '@/components/OrderCard.vue'
-import orderApi from '@/api/orderApi'
-import userApi from '@/api/userApi'
-import router from '@/router'
+import OrderCard from '@/components/cards/OrderCard.vue'
+import orderApi from '@/api/orderApi.js'
+import userApi from '@/api/userApi.js'
+import router from '@/router/index.js'
 
 const orders = ref([])
 const role = ref('')

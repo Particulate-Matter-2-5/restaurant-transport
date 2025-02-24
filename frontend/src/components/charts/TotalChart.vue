@@ -7,7 +7,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
-import financialApi from '@/api/financialApi'
+import financialApi from '@/api/financialApi.js'
 
 Chart.register(...registerables)
 

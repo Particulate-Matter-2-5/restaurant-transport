@@ -1,4 +1,4 @@
-package ku.cs.restaurant.dto;
+package ku.cs.restaurant.dto.review;
 
 import lombok.Data;
 

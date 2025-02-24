@@ -9,9 +9,16 @@ const reviewApi = {
     },
 
     createReview(reviewData) {
-        return apiClient.post('/review/submit', reviewData) 
+        return apiClient.post('/review/submit', reviewData, {
+            headers: { 'Content-Type': 'application/json' }
+        })
     },
 
+    like(likeData) {
+        return apiClient.post('/review/like', likeData, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
 }
 
 export default reviewApi

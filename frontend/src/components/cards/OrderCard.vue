@@ -85,9 +85,9 @@
 </template>
 
 <script setup>
-import orderApi from '@/api/orderApi'
-import userApi from '@/api/userApi'
-import router from '@/router'
+import orderApi from '@/api/orderApi.js'
+import userApi from '@/api/userApi.js'
+import router from '@/router/index.js'
 import { onMounted, ref } from 'vue'
 
 const role = ref('')

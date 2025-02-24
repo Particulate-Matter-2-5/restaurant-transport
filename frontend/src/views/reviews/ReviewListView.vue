@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import ReviewCard from '@/components/ReviewCard.vue'
-import userApi from '@/api/userApi'
-import reviewApi from '@/api/reviewApi'
-import router from '@/router'
+import ReviewCard from '@/components/cards/ReviewCard.vue'
+import userApi from '@/api/userApi.js'
+import reviewApi from '@/api/reviewApi.js'
+import router from '@/router/index.js'
 
 const reviews = ref([])
 const role = ref('')
@@ -64,7 +64,7 @@ const handleViewDetail = (reviewId) => {
             <Sidebar />
         </aside>
         <main
-            class="ml-[14rem] w-full py-4 px-8 flex flex-col gap-4 bg-gray-50 h-screen"
+            class="ml-[14rem] w-full py-4 px-8 flex flex-col gap-4 bg-gray-50 h-full"
         >
             <section class="w-full">
                 <span class="font-bold text-3xl">Reviews</span>

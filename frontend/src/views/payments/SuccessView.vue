@@ -1,7 +1,7 @@
 <script setup>
-import orderApi from '@/api/orderApi'
+import orderApi from '@/api/orderApi.js'
 import Sidebar from '@/components/Sidebar.vue'
-import router from '@/router'
+import router from '@/router/index.js'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -54,7 +54,7 @@ const goToReceipt = () => {
                 </h1>
                 <div>
                     <img
-                        src="@/assets/success_icon.png"
+                        src="../../assets/success_icon.png"
                         alt="Success Icon"
                         class="w-20 h-20"
                     />
