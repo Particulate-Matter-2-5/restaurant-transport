@@ -93,6 +93,12 @@ const menuItems = [
         path: '/dashboard',
         role: ['ADMIN'],
     },
+    {
+        label: 'Review',
+        icon: 'book',
+        path: '/reviewListView',
+        role: ['ADMIN'],
+    }
 ]
 
 // user มองเห็น tab sidebar ได้ตาม role ที่กำหนด

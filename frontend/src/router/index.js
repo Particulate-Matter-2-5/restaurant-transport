@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import userApi from '@/api/userApi'
 
 const routes = [
     {
@@ -94,6 +93,16 @@ const routes = [
         name: 'notFound',
         component: () => import('@/views/NotFound.vue'),
     },
+    {
+        path: '/order/:id/review',
+        name: 'ReviewView',
+        component: () => import('@/views/ReviewView.vue'),
+    },
+    {
+        path: '/reviewlistview',
+        name: 'ReviewListView',
+        component: () => import('@/views/ReviewListView.vue'),
+    }
 ]
 
 const router = createRouter({
@@ -152,7 +161,5 @@ router.beforeEach(async (to, _, next) => {
         next({ name: 'signin' })
     }
 })
-
-
 
 export default router

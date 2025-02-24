@@ -27,7 +27,7 @@
                 }}</span>
             </div>
             <span class="text-md text-gray-500 py-1 ml-1"
-                >By {{ order.user.username }}</span
+                >By {{ props.order.user.username }}</span
             >
             <span class="text-md text-gray-500 ml-1"
                 >Date: {{ order.createdAt.slice(0, 10) }}</span
@@ -62,9 +62,18 @@
                 <button
                     class="px-12 py-2 mt-2 rounded-lg"
                     style="background-color: #f6f6f6; color: #000000"
-                    @click="viewOrderDetail">
+                    @click="viewOrderDetail"
+                >
                     View Details
                 </button>
+                <botton
+                    v-if="order.status === 'SUCCESS'"
+                    class="text-center inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300 cursor-pointer"
+                    style="background-color: #ff7f50; color: #ffffff"
+                    @click="reviewOrder(order.id)"
+                >
+                    Review Order
+                </botton>
             </span>
         </div>
         <div class="flex flex-col items-end">
@@ -82,8 +91,6 @@ import router from '@/router'
 import { onMounted, ref } from 'vue'
 
 const role = ref('')
-
-
 
 onMounted(async () => {
     const { data: res } = await userApi.getUserByJwt()
@@ -132,4 +139,10 @@ const payAgain = (order) => {
     window.location.href = order.paymentLink
     // console.log('Redirecting to payment link:', order.paymentLink)
 }
+
+const reviewOrder = (id) => {
+    console.log('Reviewing order:', id)
+    window.location.href = `/order/${id}/review`
+}
+
 </script>
