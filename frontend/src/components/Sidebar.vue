@@ -97,7 +97,7 @@ const menuItems = [
         label: 'Review',
         icon: 'book',
         path: '/reviewListView',
-        role: ['ADMIN'],
+        role: ['ADMIN', 'CUSTOMER'],
     }
 ]
 
