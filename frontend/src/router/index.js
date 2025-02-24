@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import userApi from '../api/userApi'
 
 const routes = [
     {
@@ -102,7 +103,7 @@ const routes = [
         path: '/reviewlistview',
         name: 'ReviewListView',
         component: () => import('@/views/ReviewListView.vue'),
-    }
+    },
 ]
 
 const router = createRouter({

@@ -37,7 +37,7 @@
             >
             <span class="py-2 pl-1">
                 <button
-                    v-if="order.status === 'COMPLETE' && role === 'ADMIN'"
+                    v-if="order.status === 'DELIVERING' && role === 'ADMIN'"
                     class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
                     @click="markOrderSuccess(order.id)"
@@ -105,7 +105,12 @@ const props = defineProps({
     index: Number,
 })
 
-const emit = defineEmits(['mark-success', 'view-detail', 'show-recipe','mark-delivering'])
+const emit = defineEmits([
+    'mark-success',
+    'view-detail',
+    'show-recipe',
+    'mark-delivering',
+])
 
 const markOrderSuccess = async (id) => {
     try {
@@ -144,5 +149,4 @@ const reviewOrder = (id) => {
     console.log('Reviewing order:', id)
     window.location.href = `/order/${id}/review`
 }
-
 </script>
