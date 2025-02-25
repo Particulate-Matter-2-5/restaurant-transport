@@ -5,8 +5,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class LikeRequest {
+public class IsLikedByRequest {
     private UUID reviewId;
     private UUID userId;
-    private String isLiked;
 }

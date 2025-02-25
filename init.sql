@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `review` (
   `rating` int DEFAULT NULL,
   `customer_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `order_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `like_count` int DEFAULT 0,
   PRIMARY KEY (`review_id`),
   KEY `FKrrkqlt8co52qjdj34nqv97xn4` (`customer_id`),
   KEY `FK80acgchiskxpcqegik62mf1jg` (`order_id`),
@@ -92,6 +93,15 @@ CREATE TABLE IF NOT EXISTS `financial` (
   `total` double NOT NULL,
   PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=UTF8MB4_GENERAL_CI;
+
+CREATE TABLE IF NOT EXISTS `liked_by` (
+  `review_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`review_id`,`user_id`),
+  KEY `FKo6qhypgn2bf8gqis41ebg0nl1` (`user_id`),
+  CONSTRAINT `FKcrqh58co48rh641bn58ms7nu5` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`),
+  CONSTRAINT `FKo6qhypgn2bf8gqis41ebg0nl1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /* ---- INSERT ---- */
 
@@ -209,9 +219,11 @@ INSERT INTO `review`
 	('669fdff3-656c-416e-93fc-cf93964c3115', 'fucking shit', '2025-02-08 08:15:16.122175', 5, '70696dc0-f986-41f1-b59b-276b1c1ca66c', '04969a4f-e3f6-47f5-b824-dd14ea99b20e');
 
 DELETE FROM `review`;
-INSERT INTO `review` (`review_id`, `comment`, `review_date`, `rating`, `customer_id`, `order_id`) VALUES
-	('669fdff3-656c-416e-93fc-cf93964c3115', 'fucking shit', '2025-02-08 08:15:16.122175', 5, '70696dc0-f986-41f1-b59b-276b1c1ca66c', '04969a4f-e3f6-47f5-b824-dd14ea99b20e'),
-	('b5350ffd-53c9-4477-9964-0cb41134304e', 'Kak sus', '2025-02-24 11:54:29.332677', 3, 'b0d0b18c-774c-4c4a-9851-5ead92851f6e', '18e61136-25ce-437d-a380-2b593184ed4b');
+INSERT INTO `review` (`review_id`, `comment`, `review_date`, `rating`, `customer_id`, `order_id`, `like_count`) VALUES
+	('669fdff3-656c-416e-93fc-cf93964c3115', 'fucking shit', '2025-02-08 08:15:16.122175', 5,
+	 '70696dc0-f986-41f1-b59b-276b1c1ca66c', '04969a4f-e3f6-47f5-b824-dd14ea99b20e', 10),
+	('b5350ffd-53c9-4477-9964-0cb41134304e', 'Kak sus', '2025-02-24 11:54:29.332677', 3,
+	 'b0d0b18c-774c-4c4a-9851-5ead92851f6e', '18e61136-25ce-437d-a380-2b593184ed4b', 0);
 
 DELETE FROM `financial`;
 INSERT INTO `financial` (`date`, `expense`, `income`, `total`) VALUES
