@@ -13,6 +13,8 @@
                         color:
                             order.status === 'COMPLETE'
                                 ? '#ADE92E'
+                                : order.status === 'COOKING'
+                                ? '#FF6B00'
                                 : order.status === 'PENDING'
                                 ? '#FF6B00'
                                 : order.status === 'SUCCESS'
@@ -46,6 +48,14 @@
                 </button>
                 <button
                     v-if="order.status === 'COMPLETE' && role === 'COOK'"
+                    class="inline-block w-70 px-10 py-2 mt-2 mr-10 rounded-lg"
+                    style="background-color: #bcf14a; color: #000000"
+                    @click="markOrderCooking(order.id)"
+                >
+                    Cooking
+                </button>
+                <button
+                    v-if="order.status === 'COOKING' && role === 'COOK'"
                     class="inline-block w-70 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
                     @click="markOrderDelivering(order.id)"
@@ -98,7 +108,7 @@ const props = defineProps({
     index: Number,
 })
 
-const emit = defineEmits(['mark-success', 'view-detail', 'show-recipe','mark-delivering'])
+const emit = defineEmits(['mark-success','mark-cooking', 'view-detail', 'show-recipe','mark-delivering'])
 
 const markOrderSuccess = async (id) => {
     try {
@@ -110,13 +120,23 @@ const markOrderSuccess = async (id) => {
     }
 }
 
+const markOrderCooking = async (id) => {
+    try {
+        await orderApi.updateOrderStatus({ id, status: 'COOKING' })
+        emit('mark-cooking', id)
+        window.location.reload()
+    } catch (error) {
+        console.error('Error marking order as cooking:', error)
+    }
+}
+
 const markOrderDelivering = async (id) => {
     try {
         await orderApi.updateOrderStatus({ id, status: 'DELIVERING' })
         emit('mark-delivering', id)
         window.location.reload()
     } catch (error) {
-        console.error('Error marking order as success:', error)
+        console.error('Error marking order as delivering:', error)
     }
 }
 

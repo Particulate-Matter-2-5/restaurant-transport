@@ -47,7 +47,7 @@ onMounted(() => {
 
 const filteredOrders = computed(() => {
     return orders.value.filter((order) => {
-        const matchesStatus = role.value === 'COOK' && order.status === 'COMPLETE'
+        const matchesStatus = role.value === 'COOK' && (order.status === 'COMPLETE' || order.status === 'COOKING')
         const matchesSearch = searchQuery.value
             ? order.user.toLowerCase().includes(searchQuery.value.toLowerCase())
             : true
