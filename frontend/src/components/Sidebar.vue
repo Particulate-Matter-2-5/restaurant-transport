@@ -82,6 +82,12 @@ const menuItems = [
         role: ['COOK'],
     },
     {
+        label: 'To Deliver',
+        icon: 'book',
+        path: '/orderforrider',
+        role: ['RIDER'],
+    },
+    {
         label: 'Ingredient',
         icon: 'book',
         path: '/ingredient',

@@ -63,6 +63,14 @@
                     Mark as Delivering
                 </button>
                 <button
+                    v-if="order.status === 'DELIVERING' && role === 'RIDER'"
+                    class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg"
+                    style="background-color: #bcf14a; color: #000000"
+                    @click="markOrderDelivered(order.id)"
+                >
+                    Mark as Success
+                </button>
+                <button
                     v-if="order.status === 'PENDING'"
                     class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300"
                     @click="payAgain(order)"
@@ -113,6 +121,7 @@ const emit = defineEmits([
     'view-detail',
     'show-recipe',
     'mark-delivering',
+    'mark-delivered',
 ])
 
 const markOrderSuccess = async (id) => {
@@ -142,6 +151,15 @@ const markOrderDelivering = async (id) => {
         window.location.reload()
     } catch (error) {
         console.error('Error marking order as delivering:', error)
+    }
+}
+const markOrderDelivered = async (id) => {
+    try {
+        await orderApi.updateOrderStatus({ id, status: 'DELIVERED' })
+        emit('mark-delivered', id)
+        window.location.reload()
+    } catch (error) {
+        console.error('Error marking order as delivered:', error)
     }
 }
 

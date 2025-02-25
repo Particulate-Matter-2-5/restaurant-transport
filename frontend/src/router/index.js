@@ -10,11 +10,14 @@ const routes = [
                 const role = await getUserRole()
                 if (role === 'COOK') {
                     next({ name: 'orderforcook' })
+                } else if (role === 'RIDER') {
+                    next({ name: 'orderforrider'})
                 } else {
                     next({ name: 'food' })
                 }
             } catch (error) {
                 console.error('Error getting user role:', error)
+                console.error("---------", role)
                 next({ name: 'signin' })
             }
         },
@@ -43,6 +46,11 @@ const routes = [
         path: '/orderforcook',
         name: 'orderforcook',
         component: () => import('@/views/orders/OrderCookView.vue'),
+    },
+    {
+        path: '/orderforrider',
+        name: 'orderforrider',
+        component: () => import('@/views/orders/OrderRiderView.vue'),
     },
     {
         path: '/ingredient',

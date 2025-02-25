@@ -4,15 +4,22 @@ import receiptApi from '@/api/receiptApi'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import userApi from '@/api/userApi'
 
 const b_total = ref('')
 const b_id = ref('')
 const created_at = ref('')
 const username = ref('')
 const foodList = ref([])
+const role = ref('')
 
 const goBack = () => {
-    router.push('/order')
+    console.log("ROLE: ", role.value)
+    if (role.value === 'RIDER') {
+        router.push('/orderforrider')
+    } else {
+        router.push('/order')
+    }
 }
 
 onMounted(async () => {
@@ -27,6 +34,8 @@ onMounted(async () => {
         const { data: responseFood } = await receiptApi.getFoodById(
             route.params.id
         )
+        const { data: userResponse } = await userApi.getUserByJwt()
+        role.value = userResponse.data.role
 
         b_total.value = responseOrder.data.total
         b_id.value = responseOrder.data.id

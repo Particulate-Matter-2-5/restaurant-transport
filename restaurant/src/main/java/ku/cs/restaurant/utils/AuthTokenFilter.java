@@ -31,12 +31,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     static {
         // Define roles required for specific URI prefixes
-        uriRoleMap.put("/order", new HashSet<>(Arrays.asList("COOK", "ADMIN", "CUSTOMER")));
-        uriRoleMap.put("/recipe", new HashSet<>(Arrays.asList("COOK", "ADMIN")));
-        uriRoleMap.put("/user", new HashSet<>(Arrays.asList("COOK", "ADMIN", "CUSTOMER")));
-        uriRoleMap.put("/foods", new HashSet<>(Arrays.asList("CUSTOMER", "ADMIN", "COOK")));
-        uriRoleMap.put("/order_line", new HashSet<>(Arrays.asList("CUSTOMER", "ADMIN", "COOK")));
-        uriRoleMap.put("/receipt", new HashSet<>(Arrays.asList("CUSTOMER", "ADMIN", "COOK")));
+        uriRoleMap.put("/order", new HashSet<>(Arrays.asList("RIDER", "COOK", "ADMIN", "CUSTOMER")));
+        uriRoleMap.put("/recipe", new HashSet<>(Arrays.asList("RIDER", "COOK", "ADMIN")));
+        uriRoleMap.put("/user", new HashSet<>(Arrays.asList("RIDER", "COOK", "ADMIN", "CUSTOMER")));
+        uriRoleMap.put("/foods", new HashSet<>(Arrays.asList("RIDER", "CUSTOMER", "ADMIN", "COOK")));
+        uriRoleMap.put("/order_line", new HashSet<>(Arrays.asList("RIDER", "CUSTOMER", "ADMIN", "COOK")));
+        uriRoleMap.put("/receipt", new HashSet<>(Arrays.asList("RIDER", "CUSTOMER", "ADMIN", "COOK")));
         uriRoleMap.put("/financial", new HashSet<>(Collections.singletonList("ADMIN")));
         uriRoleMap.put("/review", new HashSet<>(Arrays.asList("ADMIN", "CUSTOMER")));
         uriRoleMap.put("/ingredient", new HashSet<>(Collections.singletonList("ADMIN")));
