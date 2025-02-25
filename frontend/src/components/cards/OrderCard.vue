@@ -39,7 +39,7 @@
             >
             <span class="py-2 pl-1">
                 <button
-                    v-if="order.status === 'COMPLETE' && role === 'ADMIN'"
+                    v-if="order.status === 'DELIVERED' && role === 'ADMIN'"
                     class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
                     @click="markOrderSuccess(order.id)"
@@ -72,7 +72,8 @@
                 <button
                     class="px-12 py-2 mt-2 rounded-lg"
                     style="background-color: #f6f6f6; color: #000000"
-                    @click="viewOrderDetail">
+                    @click="viewOrderDetail"
+                >
                     View Details
                 </button>
             </span>
@@ -93,8 +94,6 @@ import { onMounted, ref } from 'vue'
 
 const role = ref('')
 
-
-
 onMounted(async () => {
     const { data: res } = await userApi.getUserByJwt()
     role.value = res.data.role
@@ -108,7 +107,13 @@ const props = defineProps({
     index: Number,
 })
 
-const emit = defineEmits(['mark-success','mark-cooking', 'view-detail', 'show-recipe','mark-delivering'])
+const emit = defineEmits([
+    'mark-success',
+    'mark-cooking',
+    'view-detail',
+    'show-recipe',
+    'mark-delivering',
+])
 
 const markOrderSuccess = async (id) => {
     try {
