@@ -2,6 +2,7 @@ package ku.cs.restaurant.controller;
 
 import ku.cs.restaurant.dto.ApiResponse;
 import ku.cs.restaurant.dto.review.IsLikedByRequest;
+import ku.cs.restaurant.dto.review.IsLikedByResponse;
 import ku.cs.restaurant.dto.review.LikeRequest;
 import ku.cs.restaurant.dto.review.ReviewRequest;
 import ku.cs.restaurant.entity.Review;
@@ -61,13 +62,15 @@ public class ReviewController {
     }
 
     @PostMapping("/review/isLiked")
-    public ResponseEntity<ApiResponse<Boolean>> getIsLiked(@RequestBody IsLikedByRequest req) {
+    public ResponseEntity<ApiResponse<IsLikedByResponse>> getIsLiked(@RequestBody IsLikedByRequest req) {
         try {
             boolean isLiked = likedByService.isLikedBy(req.getReviewId(), req.getUserId());
-            return ResponseEntity.ok(new ApiResponse<>(true, "Success", isLiked));
+            IsLikedByResponse isLikedByResponse = new IsLikedByResponse();
+            isLikedByResponse.setLiked(isLiked);
+            return ResponseEntity.ok(new ApiResponse<>(true, "success", isLikedByResponse));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), false));
+                    .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), null));
         }
     }
 

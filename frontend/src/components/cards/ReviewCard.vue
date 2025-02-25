@@ -48,8 +48,7 @@ const checkIsLiked = async () => {
             reviewId: props.review.id,
             userId: user.data.id,
         })
-        console.log(res)
-        isLiked.value = res.success
+        isLiked.value = res.data.liked
         console.log('isLiked status:', isLiked.value)
     } catch (error) {
         console.error('Error checking like status:', error)
