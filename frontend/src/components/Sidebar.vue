@@ -88,6 +88,12 @@ const menuItems = [
         role: ['RIDER'],
     },
     {
+        label: 'History',
+        icon: 'book',
+        path: '/orderhistory',
+        role: ['RIDER'],
+    },
+    {
         label: 'Ingredient',
         icon: 'book',
         path: '/ingredient',
