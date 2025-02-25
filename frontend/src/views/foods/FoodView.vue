@@ -1,12 +1,12 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import Card from '@/components/Card.vue'
+import Card from '@/components/cards/Card.vue'
 import Search from '@/components/Search.vue'
-import { foodsStore } from '@/stores/cart'
+import { foodsStore } from '@/stores/cart.js'
 import Cart from '@/components/Cart.vue'
-import router from '@/router'
-import userApi from '@/api/userApi'
+import router from '@/router/index.js'
+import userApi from '@/api/userApi.js'
 
 const foodStore = foodsStore()
 const searchQuery = ref('')

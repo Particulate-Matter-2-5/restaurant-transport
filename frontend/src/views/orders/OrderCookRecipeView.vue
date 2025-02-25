@@ -1,8 +1,8 @@
 <script setup>
 import Sidebar from '@/components/Sidebar.vue'
-import receiptApi from '@/api/receiptApi'
-import recipeApi from '@/api/recipeApi'
-import router from '@/router'
+import receiptApi from '@/api/receiptApi.js'
+import recipeApi from '@/api/recipeApi.js'
+import router from '@/router/index.js'
 import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
 

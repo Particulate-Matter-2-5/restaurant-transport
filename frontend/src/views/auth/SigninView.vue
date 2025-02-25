@@ -8,7 +8,7 @@
                 class="flex flex-col w-4/5 h-full m-auto gap-8 justify-center"
             >
                 <div class="flex mx-auto justify-center">
-                    <img src="../assets/food-icon.png" />
+                    <img src="../../assets/food-icon.png" />
                     <span class="flex items-center text-2xl font-bold">
                         &nbsp;SuperDuperPOS</span
                     >
@@ -43,7 +43,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import authApi from '@/api/authApi'
+import authApi from '@/api/authApi.js'
 
 const username = ref('')
 const password = ref('')

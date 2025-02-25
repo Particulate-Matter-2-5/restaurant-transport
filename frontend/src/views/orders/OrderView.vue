@@ -1,11 +1,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import Search from '@/components/Search.vue'
-import OrderCard from '@/components/OrderCard.vue'
-import orderApi from '@/api/orderApi'
-import userApi from '@/api/userApi'
-import router from '@/router'
+import OrderCard from '@/components/cards/OrderCard.vue'
+import orderApi from '@/api/orderApi.js'
+import userApi from '@/api/userApi.js'
+import router from '@/router/index.js'
 
 const orders = ref([])
 const role = ref('')
@@ -22,11 +21,6 @@ const fetchOrders = async () => {
         user.value = userResponse.data
         role.value = userResponse.data.role
         const loggedInUserId = user.value.id
-
-        console.log(orderResponse)
-        console.log('---')
-        console.log(userResponse)
-        console.log(loggedInUserId)
 
         // Filter orders based on user role
         orders.value =
@@ -119,6 +113,7 @@ const handleViewDetail = (orderId) => {
                         v-for="option in [
                             'PENDING',
                             'COMPLETE',
+                            'COOKING',
                             'DELIVERING',
                             'DELIVERED',
                             'CANCEL',

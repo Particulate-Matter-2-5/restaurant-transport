@@ -1,8 +1,8 @@
 <script setup>
 import Sidebar from '@/components/Sidebar.vue'
-import IncomeChart from '@/components/IncomeChart.vue'
-import ExpenseChart from '@/components/ExpenseChart.vue'
-import TotalChart from '@/components/TotalChart.vue'
+import IncomeChart from '@/components/charts/IncomeChart.vue'
+import ExpenseChart from '@/components/charts/ExpenseChart.vue'
+import TotalChart from '@/components/charts/TotalChart.vue'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup>
-import orderApi from '@/api/orderApi'
+import orderApi from '@/api/orderApi.js'
 import Sidebar from '@/components/Sidebar.vue'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
@@ -41,7 +41,7 @@ onMounted(async () => {
                 <h1 class="text-red-500 text-4xl font-bold">Payment Failed</h1>
                 <div>
                     <img
-                        src="@/assets/cancel_icon.png"
+                        src="../../assets/cancel_icon.png"
                         alt="Cancel Icon"
                         class="w-20 h-20"
                     />

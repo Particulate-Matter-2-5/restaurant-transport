@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS `order` (
   `o_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `payment_link` text COLLATE utf8mb4_general_ci,
-  `o_status` enum('CANCEL','COMPLETE','PENDING','SUCCESS','DELIVERING') COLLATE utf8mb4_general_ci NOT NULL,
+  `o_status` enum('CANCEL','COMPLETE','PENDING','SUCCESS','DELIVERING', 'DELIVERED') COLLATE utf8mb4_general_ci NOT
+    NULL,
   `o_total` double NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   `b_id` varchar(36) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -71,12 +72,13 @@ CREATE TABLE IF NOT EXISTS `order_line` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `review` (
-  `review_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
-  `comment` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `review_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `review_date` datetime(6) DEFAULT NULL,
   `rating` int DEFAULT NULL,
-  `customer_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
-  `order_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `customer_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `order_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `like_count` int DEFAULT 0,
   PRIMARY KEY (`review_id`),
   KEY `FKrrkqlt8co52qjdj34nqv97xn4` (`customer_id`),
   KEY `FK80acgchiskxpcqegik62mf1jg` (`order_id`),
@@ -92,12 +94,23 @@ CREATE TABLE IF NOT EXISTS `financial` (
   PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=UTF8MB4_GENERAL_CI;
 
+CREATE TABLE IF NOT EXISTS `liked_by` (
+  `review_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`review_id`,`user_id`),
+  KEY `FKo6qhypgn2bf8gqis41ebg0nl1` (`user_id`),
+  CONSTRAINT `FKcrqh58co48rh641bn58ms7nu5` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`),
+  CONSTRAINT `FKo6qhypgn2bf8gqis41ebg0nl1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/* ---- INSERT ---- */
+
 DELETE FROM `user`;
 INSERT INTO `user` (`user_id`, `password`, `phone`, `user_role`, `username`) VALUES
 	('18817ab1-0e27-4ed6-adfa-2f7fa51271b7', '$2a$10$OvhEw66x5GbUvm3O1CS/Nul4rk55/HwhYFuiveOSX.rSgUyJaSng6', '0958738843', 'CUSTOMER', 'giwi'),
 	('70696dc0-f986-41f1-b59b-276b1c1ca66c', '$2a$10$vsu2gj19CeCjPOy/qAuPse1MtfJm65qPkxPr3G9Mwcynev7H.Wiy2', '0958738843', 'ADMIN', 'admin'),
 	('b0d0b18c-774c-4c4a-9851-5ead92851f6e', '$2a$10$976oiad6zK8C48xSFKLOMOhOx4fRVcLob32KlYtjkql5L1Sf2/ZKO', '0958778844', 'CUSTOMER', 'banana'),
-	('b2e4894c-4649-49bb-8c52-1a5c04502f4b', '$2a$10$qoy4zojbU2RrQroQvK7NvutX8U0bpUo0h94Ltw0TZ.6l.UzmYzzOi', '0958777744', 'CUSTOMER', 'apple');
+	('b2e4894c-4649-49bb-8c52-1a5c04502f4b', '$2a$10$qoy4zojbU2RrQroQvK7NvutX8U0bpUo0h94Ltw0TZ.6l.UzmYzzOi', '0958777744', 'COOK', 'apple');
 
 
 DELETE FROM `food`;
@@ -204,6 +217,13 @@ DELETE FROM `review`;
 INSERT INTO `review` 
 	(`review_id`, `comment`, `review_date`, `rating`, `customer_id`, `order_id`) VALUES
 	('669fdff3-656c-416e-93fc-cf93964c3115', 'fucking shit', '2025-02-08 08:15:16.122175', 5, '70696dc0-f986-41f1-b59b-276b1c1ca66c', '04969a4f-e3f6-47f5-b824-dd14ea99b20e');
+
+DELETE FROM `review`;
+INSERT INTO `review` (`review_id`, `comment`, `review_date`, `rating`, `customer_id`, `order_id`, `like_count`) VALUES
+	('669fdff3-656c-416e-93fc-cf93964c3115', 'fucking shit', '2025-02-08 08:15:16.122175', 5,
+	 '70696dc0-f986-41f1-b59b-276b1c1ca66c', '04969a4f-e3f6-47f5-b824-dd14ea99b20e', 10),
+	('b5350ffd-53c9-4477-9964-0cb41134304e', 'Kak sus', '2025-02-24 11:54:29.332677', 3,
+	 'b0d0b18c-774c-4c4a-9851-5ead92851f6e', '18e61136-25ce-437d-a380-2b593184ed4b', 0);
 
 DELETE FROM `financial`;
 INSERT INTO `financial` (`date`, `expense`, `income`, `total`) VALUES

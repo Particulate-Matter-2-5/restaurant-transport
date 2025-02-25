@@ -7,7 +7,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
-import financialApi from '@/api/financialApi'
+import financialApi from '@/api/financialApi.js'
 
 Chart.register(...registerables)
 
@@ -23,7 +23,7 @@ const getDatas = async () => {
     const labels = data.value.map((item) =>
         item.date.split('-').slice(1).join('/')
     )
-    const totalData = data.value.map((item) => item.income)
+    const totalData = data.value.map((item) => item.expense)
 
     // Initialize chart after data is retrieved
     const ctx = myChart.value.getContext('2d')
@@ -50,7 +50,7 @@ const getDatas = async () => {
                 },
                 title: {
                     display: true,
-                    text: 'Income',
+                    text: 'Expense',
                     font: {
                         family: 'Gilroy Bold',
                         size: 30,
