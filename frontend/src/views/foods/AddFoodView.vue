@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import foodApi from '@/api/foodApi'
-import ingredientApi from '@/api/ingredientApi'
-import router from '@/router'
+import foodApi from '@/api/foodApi.js'
+import ingredientApi from '@/api/ingredientApi.js'
+import router from '@/router/index.js'
 
 const foodData = ref({
     name: '',

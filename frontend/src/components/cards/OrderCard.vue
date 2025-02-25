@@ -27,7 +27,7 @@
                 }}</span>
             </div>
             <span class="text-md text-gray-500 py-1 ml-1"
-                >By {{ order.user.username }}</span
+                >By {{ props.order.user.username }}</span
             >
             <span class="text-md text-gray-500 ml-1"
                 >Date: {{ order.createdAt.slice(0, 10) }}</span
@@ -37,7 +37,7 @@
             >
             <span class="py-2 pl-1">
                 <button
-                    v-if="order.status === 'COMPLETE' && role === 'ADMIN'"
+                    v-if="order.status === 'DELIVERING' && role === 'ADMIN'"
                     class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
                     @click="markOrderSuccess(order.id)"
@@ -62,9 +62,18 @@
                 <button
                     class="px-12 py-2 mt-2 rounded-lg"
                     style="background-color: #f6f6f6; color: #000000"
-                    @click="viewOrderDetail">
+                    @click="viewOrderDetail"
+                >
                     View Details
                 </button>
+                <botton
+                    v-if="order.status === 'SUCCESS'"
+                    class="text-center inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300 cursor-pointer"
+                    style="background-color: #ff7f50; color: #ffffff"
+                    @click="reviewOrder(order.id)"
+                >
+                    Review Order
+                </botton>
             </span>
         </div>
         <div class="flex flex-col items-end">
@@ -76,14 +85,12 @@
 </template>
 
 <script setup>
-import orderApi from '@/api/orderApi'
-import userApi from '@/api/userApi'
-import router from '@/router'
+import orderApi from '@/api/orderApi.js'
+import userApi from '@/api/userApi.js'
+import router from '@/router/index.js'
 import { onMounted, ref } from 'vue'
 
 const role = ref('')
-
-
 
 onMounted(async () => {
     const { data: res } = await userApi.getUserByJwt()
@@ -98,7 +105,12 @@ const props = defineProps({
     index: Number,
 })
 
-const emit = defineEmits(['mark-success', 'view-detail', 'show-recipe','mark-delivering'])
+const emit = defineEmits([
+    'mark-success',
+    'view-detail',
+    'show-recipe',
+    'mark-delivering',
+])
 
 const markOrderSuccess = async (id) => {
     try {
@@ -131,5 +143,10 @@ const viewOrderDetailforCook = () => {
 const payAgain = (order) => {
     window.location.href = order.paymentLink
     // console.log('Redirecting to payment link:', order.paymentLink)
+}
+
+const reviewOrder = (id) => {
+    console.log('Reviewing order:', id)
+    window.location.href = `/order/${id}/review`
 }
 </script>

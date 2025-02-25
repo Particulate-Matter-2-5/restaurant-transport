@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import userApi from '@/api/userApi'
+import userApi from '../api/userApi'
 
 const routes = [
     {
@@ -22,32 +22,32 @@ const routes = [
     {
         path: '/signup',
         name: 'signup',
-        component: () => import('@/views/SignupView.vue'),
+        component: () => import('@/views/auth/SignupView.vue'),
     },
     {
         path: '/signin',
         name: 'signin',
-        component: () => import('@/views/SigninView.vue'),
+        component: () => import('@/views/auth/SigninView.vue'),
     },
     {
         path: '/food',
         name: 'food',
-        component: () => import('@/views/FoodView.vue'),
+        component: () => import('@/views/foods/FoodView.vue'),
     },
     {
         path: '/order',
         name: 'order',
-        component: () => import('@/views/OrderView.vue'),
+        component: () => import('@/views/orders/OrderView.vue'),
     },
     {
         path: '/orderforcook',
         name: 'orderforcook',
-        component: () => import('@/views/OrderCookView.vue'),
+        component: () => import('@/views/orders/OrderCookView.vue'),
     },
     {
         path: '/ingredient',
         name: 'ingredient',
-        component: () => import('@/views/IngredientView.vue'),
+        component: () => import('@/views/ingredients/IngredientView.vue'),
     },
     {
         path: '/receipt/:id',
@@ -57,7 +57,7 @@ const routes = [
     {
         path: '/receiptforcook/:id',
         name: 'receiptforcook',
-        component: () => import('@/views/OrderCookRecipeView.vue'),
+        component: () => import('@/views/orders/OrderCookRecipeView.vue'),
     },
     {
         path: '/dashboard',
@@ -72,27 +72,37 @@ const routes = [
     {
         path: '/payment/success',
         name: 'success',
-        component: () => import('@/views/SuccessView.vue'),
+        component: () => import('@/views/payments/SuccessView.vue'),
     },
     {
         path: '/payment/fail',
         name: 'fail',
-        component: () => import('@/views/CancelView.vue'),
+        component: () => import('@/views/payments/CancelView.vue'),
     },
     {
         path: '/addingredients',
         name: 'addingredients',
-        component: () => import('@/views/AddIngredientsView.vue'),
+        component: () => import('@/views/ingredients/AddIngredientsView.vue'),
     },
     {
         path: '/addfood',
         name: 'addfood',
-        component: () => import('@/views/AddFoodView.vue'),
+        component: () => import('@/views/foods/AddFoodView.vue'),
     },
     {
         path: '/:pathMatch(.*)*', // Catch-all for undefined routes
         name: 'notFound',
         component: () => import('@/views/NotFound.vue'),
+    },
+    {
+        path: '/order/:id/review',
+        name: 'ReviewView',
+        component: () => import('@/views/reviews/ReviewView.vue'),
+    },
+    {
+        path: '/reviewlistview',
+        name: 'ReviewListView',
+        component: () => import('@/views/reviews/ReviewListView.vue'),
     },
 ]
 
@@ -152,7 +162,5 @@ router.beforeEach(async (to, _, next) => {
         next({ name: 'signin' })
     }
 })
-
-
 
 export default router

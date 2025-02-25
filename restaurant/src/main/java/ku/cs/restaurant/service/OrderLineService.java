@@ -17,7 +17,7 @@ public class OrderLineService {
         this.orderLineRepository = orderLineRepository;
     }
 
-    public OrderLine createOrderLine(int qty, Order order, Food food) {
+    public void createOrderLine(int qty, Order order, Food food) {
         OrderLine orderLine = new OrderLine();
 
         OrderLineKey orderLineKey = new OrderLineKey(food.getId(), order.getId());
@@ -27,7 +27,7 @@ public class OrderLineService {
         orderLine.setOrder(order);
         orderLine.setFood(food);
 
-        return orderLineRepository.save(orderLine);
+        orderLineRepository.save(orderLine);
     }
 
     public List<OrderLine> findOrderLine() {

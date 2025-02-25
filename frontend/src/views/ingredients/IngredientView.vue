@@ -1,12 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import EditIngredientModal from '@/components/EditIngredientModal.vue'
-import IngredientCard from '@/components/IngredientCard.vue'
-import ingredientApi from '@/api/ingredientApi'
+import EditIngredientModal from '@/components/modals/EditIngredientModal.vue'
+import IngredientCard from '@/components/cards/IngredientCard.vue'
+import ingredientApi from '@/api/ingredientApi.js'
 import Search from '@/components/Search.vue'
-import router from '@/router'
-import userApi from '@/api/userApi'
+import router from '@/router/index.js'
+import userApi from '@/api/userApi.js'
 
 const role = ref('')
 const ingredients = ref([])

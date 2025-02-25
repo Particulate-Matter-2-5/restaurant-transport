@@ -2,7 +2,9 @@
     <div
         class="flex justify-between items-center flex-col w-60 h-72 rounded-lg shadow-md bg-white relative"
     >
-        <div class="w-full h-3/5 relative">
+        <div
+            class="w-full h-3/5 relative cursor-pointer"
+        >
             <img
                 :src="props.foodsData.imagePath"
                 alt="Food Image"
@@ -61,9 +63,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { foodsStore } from '@/stores/cart'
-import userApi from '@/api/userApi'
-import RecipePopup from '@/components/RecipePopup.vue'
+import { foodsStore } from '@/stores/cart.js'
+import userApi from '@/api/userApi.js'
+import RecipePopup from '@/components/modals/RecipePopup.vue'
 
 const props = defineProps({
     foodsData: {

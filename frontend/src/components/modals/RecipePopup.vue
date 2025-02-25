@@ -27,7 +27,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import recipeApi from '@/api/recipeApi'
+import recipeApi from '@/api/recipeApi.js'
 
 const props = defineProps({
     foodId: {

@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import userApi from '@/api/userApi'
+import userApi from '@/api/userApi.js'
 import { onMounted, ref } from 'vue'
 
 // Helper function to check if the ingredient is expired
