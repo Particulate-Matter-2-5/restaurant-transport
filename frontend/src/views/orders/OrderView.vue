@@ -132,6 +132,7 @@ const handleViewDetail = (orderId) => {
             <!-- Order list -->
             <section class="mt-4">
                 <OrderCard
+                    class="animate-slideUp"
                     v-for="(order, i) in filteredOrders"
                     :index="i + 1"
                     :key="order.id"

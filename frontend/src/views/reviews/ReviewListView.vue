@@ -44,10 +44,11 @@ const selectOption = (option) => {
 
 const filteredReviews = computed(() => {
     return reviews.value.filter((review) => {
-        const matchesStatus =
-            selectedOption.value === 'All Review'
+        const matchesStatus = selectedOption.value === 'All Review'
         const matchesSearch = searchQuery.value
-            ? review.comment.toLowerCase().includes(searchQuery.value.toLowerCase())
+            ? review.comment
+                  .toLowerCase()
+                  .includes(searchQuery.value.toLowerCase())
             : true
         return matchesStatus && matchesSearch
     })
@@ -83,9 +84,7 @@ const handleViewDetail = (reviewId) => {
                     class="absolute bg-white rounded-lg shadow-lg text-gray-500"
                 >
                     <li
-                        v-for="option in [
-                            'All Review',
-                        ]"
+                        v-for="option in ['All Review']"
                         :key="option"
                         @click="selectOption(option)"
                         class="px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-lg"
@@ -97,6 +96,7 @@ const handleViewDetail = (reviewId) => {
 
             <section class="mt-4">
                 <ReviewCard
+                    class="animate-slideUp"
                     v-for="(review, i) in filteredReviews"
                     :index="i + 1"
                     :key="review.review_id"

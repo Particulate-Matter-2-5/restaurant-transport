@@ -198,6 +198,7 @@ const validateRange = () => {
                         :key="ingredient.id"
                     >
                         <IngredientCard
+                            class="animate-slideUp"
                             @click="openModal(ingredient)"
                             :ingredientData="ingredient"
                         />

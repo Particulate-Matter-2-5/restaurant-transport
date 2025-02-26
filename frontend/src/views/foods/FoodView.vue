@@ -68,7 +68,11 @@ onMounted(() => {
             <!-- food list section  -->
             <section class="pb-12">
                 <ul class="foods-grid">
-                    <li v-for="food in filteredFoods" :key="food.id">
+                    <li
+                        v-for="food in filteredFoods"
+                        :key="food.id"
+                        class="animate-slideUp"
+                    >
                         <Card :foodsData="food" />
                     </li>
                 </ul>
