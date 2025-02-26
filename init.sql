@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `liked_by` (
 
 DELETE FROM `user`;
 INSERT INTO `user` (`user_id`, `password`, `phone`, `user_role`, `username`) VALUES
-	('18817ab1-0e27-4ed6-adfa-2f7fa51271b7', '$2a$10$OvhEw66x5GbUvm3O1CS/Nul4rk55/HwhYFuiveOSX.rSgUyJaSng6', '0958738843', 'CUSTOMER', 'giwi'),
+	('18817ab1-0e27-4ed6-adfa-2f7fa51271b7', '$2a$10$OvhEw66x5GbUvm3O1CS/Nul4rk55/HwhYFuiveOSX.rSgUyJaSng6', '0958738843', 'RIDER', 'giwi'),
 	('70696dc0-f986-41f1-b59b-276b1c1ca66c', '$2a$10$vsu2gj19CeCjPOy/qAuPse1MtfJm65qPkxPr3G9Mwcynev7H.Wiy2', '0958738843', 'ADMIN', 'admin'),
 	('b0d0b18c-774c-4c4a-9851-5ead92851f6e', '$2a$10$976oiad6zK8C48xSFKLOMOhOx4fRVcLob32KlYtjkql5L1Sf2/ZKO', '0958778844', 'CUSTOMER', 'banana'),
 	('b2e4894c-4649-49bb-8c52-1a5c04502f4b', '$2a$10$qoy4zojbU2RrQroQvK7NvutX8U0bpUo0h94Ltw0TZ.6l.UzmYzzOi', '0958777744', 'COOK', 'apple');
