@@ -2,12 +2,15 @@
     <div class="border-2 rounded-md p-4 w-full mb-4 shadow-md h-fit min-w-48">
         <div class="flex justify-between">
             <p>Order ID: #{{ review.order.id.slice(0, 4) }}</p>
-            <fa
-                class="text-3xl cursor-pointer hover:text-red-500 duration-200"
-                :class="isLiked ? 'text-red-500' : 'text-gray-400'"
-                icon="heart"
-                @click="handleLike"
-            />
+            <div class="flex gap-4 items-center">
+                <span>{{ review.likeCount }} </span>
+                <fa
+                    class="text-3xl cursor-pointer hover:text-red-500 duration-200"
+                    :class="isLiked ? 'text-red-500' : 'text-gray-400'"
+                    icon="heart"
+                    @click="handleLike"
+                />
+            </div>
         </div>
         <p>Customer Name: {{ review.customer.username }}</p>
 
@@ -57,6 +60,8 @@ const checkIsLiked = async () => {
 
 const handleLike = async () => {
     try {
+        isLiked.value ? props.review.likeCount-- : props.review.likeCount++
+
         isLiked.value = !isLiked.value
         const { data: user } = await userApi.getUserByJwt()
         const { data: res } = await reviewApi.like({
