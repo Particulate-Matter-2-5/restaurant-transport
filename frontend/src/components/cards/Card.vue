@@ -2,16 +2,14 @@
     <div
         class="flex justify-between items-center flex-col w-60 h-72 rounded-lg shadow-md bg-white relative"
     >
-        <div
-            class="w-full h-3/5 relative cursor-pointer"
-        >
+        <div class="w-full h-3/5 relative cursor-pointer">
             <img
                 :src="props.foodsData.imagePath"
                 alt="Food Image"
                 class="w-full h-full object-cover rounded-t-lg"
             />
             <div
-                v-show="!showRecipePopup" 
+                v-show="!showRecipePopup"
                 class="absolute inset-0 bg-gradient-to-b from-transparent to-white opacity-20 bottom-0"
             ></div>
         </div>
@@ -21,7 +19,10 @@
             <span class="font-bold">{{ props.foodsData.name }}</span>
             <span class="text-yellow-500"
                 >{{
-                    props.foodsData.price + props.foodsData.price * 0.07
+                    (
+                        props.foodsData.price +
+                        props.foodsData.price * 0.07
+                    ).toFixed(2)
                 }}
                 ฿</span
             >

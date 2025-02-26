@@ -88,7 +88,7 @@
         </div>
         <div class="flex flex-col items-end">
             <span class="text-4xl text-gray-750"
-                >{{ order.total + order.total * 0.07 }} ฿</span
+                >{{ (order.total + order.total * 0.07).toFixed(2) }} ฿</span
             >
         </div>
     </div>
