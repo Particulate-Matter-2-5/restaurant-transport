@@ -1,5 +1,6 @@
 package ku.cs.restaurant.service;
 
+import ku.cs.restaurant.entity.Food;
 import ku.cs.restaurant.entity.Order;
 import ku.cs.restaurant.entity.Review;
 import ku.cs.restaurant.entity.User;
@@ -8,10 +9,7 @@ import ku.cs.restaurant.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +71,11 @@ public class ReviewService {
 
     public List<Review> getReviews() {
         return reviewRepository.findAll();
+    }
+
+    public void deleteReview(UUID id) {
+        if (reviewRepository.existsById(id)) {
+            reviewRepository.deleteById(id);
+        }
     }
 }

@@ -77,13 +77,14 @@
                 >
                     Pay Again
                 </button>
-                <button
-                    class="px-12 py-2 mt-2 rounded-lg"
-                    style="background-color: #f6f6f6; color: #000000"
-                    @click="viewOrderDetail"
+                <botton
+                    v-if="order.status === 'SUCCESS'"
+                    class="text-center inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300 cursor-pointer"
+                    style="background-color: #ff7f50; color: #ffffff"
+                    @click="reviewOrder(order.id)"
                 >
-                    View Details
-                </button>
+                    Review Order
+                </botton>
             </span>
         </div>
         <div class="flex flex-col items-end">
@@ -174,5 +175,10 @@ const viewOrderDetailforCook = () => {
 const payAgain = (order) => {
     window.location.href = order.paymentLink
     // console.log('Redirecting to payment link:', order.paymentLink)
+}
+
+const reviewOrder = (id) => {
+    console.log('Reviewing order:', id)
+    window.location.href = `/order/${id}/review`
 }
 </script>

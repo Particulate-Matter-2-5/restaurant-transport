@@ -1,9 +1,14 @@
 import apiClient from './index'
-import userApi from './userApi'
 
 const reviewApi = {
     getReviews() {
         return apiClient.get('/review', {
+            headers: { 'Content-Type': 'application/json' },
+        })
+    },
+
+    deleteReview(reviewId) {
+        return apiClient.delete(`/review/${reviewId}`, {
             headers: { 'Content-Type': 'application/json' },
         })
     },

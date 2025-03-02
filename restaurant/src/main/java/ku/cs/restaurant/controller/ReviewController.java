@@ -5,6 +5,7 @@ import ku.cs.restaurant.dto.review.IsLikedByRequest;
 import ku.cs.restaurant.dto.review.IsLikedByResponse;
 import ku.cs.restaurant.dto.review.LikeRequest;
 import ku.cs.restaurant.dto.review.ReviewRequest;
+import ku.cs.restaurant.entity.RecipeKey;
 import ku.cs.restaurant.entity.Review;
 import ku.cs.restaurant.service.LikedByService;
 import ku.cs.restaurant.service.ReviewService;
@@ -71,6 +72,17 @@ public class ReviewController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/review/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteReview(@PathVariable UUID id) {
+        try {
+            reviewService.deleteReview(id);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Review deleted successfully.", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, "Review not found.", null));
         }
     }
 

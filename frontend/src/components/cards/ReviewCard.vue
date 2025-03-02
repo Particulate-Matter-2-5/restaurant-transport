@@ -10,6 +10,13 @@
                     icon="heart"
                     @click="handleLike"
                 />
+                <button 
+                v-if="loginUserId === review.customer.id || role === 'ADMIN'"
+                class="bg-red-500 text-white px-2 py-1 rounded-md"
+                @click="deleteReview(review.id)"
+            >
+                Delete
+            </button>
             </div>
         </div>
         <p>Customer Name: {{ review.customer.username }}</p>
@@ -43,6 +50,8 @@ import userApi from '@/api/userApi'
 const props = defineProps<{ review }>()
 
 const isLiked = ref<boolean>(false)
+const loginUserId = ref<string>('')
+const role = ref<string>('')
 
 const checkIsLiked = async () => {
     try {
@@ -52,6 +61,8 @@ const checkIsLiked = async () => {
             userId: user.data.id,
         })
         isLiked.value = res.data.liked
+        loginUserId.value = user.data.id 
+        role.value = user.data.role
         console.log('isLiked status:', isLiked.value)
     } catch (error) {
         console.error('Error checking like status:', error)
@@ -79,6 +90,17 @@ const handleLike = async () => {
 onMounted(() => {
     checkIsLiked()
 })
+
+const deleteReview = async (id) => {
+    try {
+        await reviewApi.deleteReview(id)
+        console.log('Review deleted')
+        window.location.reload()
+    } catch (error) {
+        console.error('Error deleting review:', error)
+    }
+}
+
 </script>
 
 <style scoped>
