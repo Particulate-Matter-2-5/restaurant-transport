@@ -11,7 +11,6 @@ onMounted(async () => {
     const orderId = route.query.id
     if (orderId) {
         try {
-
             const { data: resQty } = await orderApi.updateOrderIngredientQty(
                 orderId
             )
@@ -19,6 +18,9 @@ onMounted(async () => {
                 id: orderId,
                 status: 'COMPLETE',
             })
+
+            // delete carts after paid
+            localStorage.removeItem('carts')
 
             console.log('Order status updated:', resStatus.data)
             console.log('Order qty updated', resQty.data)
