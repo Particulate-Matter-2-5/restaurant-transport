@@ -25,7 +25,7 @@
                     ●
                 </span>
                 <span class="align-text-bottom text-lg ml-1">{{
-                    order.status
+                    order.status === 'COMPLETE' ? 'PAID' : order.status
                 }}</span>
             </div>
             <span class="text-md text-gray-500 py-1 ml-1"
@@ -53,6 +53,14 @@
                     @click="markOrderCooking(order.id)"
                 >
                     Cooking
+                </button>
+                <button
+                    v-if="order.status === 'COMPLETE' && role === 'COOK'"
+                    class="inline-block w-70 px-10 py-2 mt-2 mr-10 rounded-lg"
+                    style="background-color: #dddddd; color: #000000"
+                    @click="viewOrderDetailforCook(order.id)"
+                >
+                    View Recipe
                 </button>
                 <button
                     v-if="order.status === 'COOKING' && role === 'COOK'"
