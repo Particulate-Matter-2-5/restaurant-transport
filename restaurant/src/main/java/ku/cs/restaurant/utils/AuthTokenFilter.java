@@ -40,6 +40,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         uriRoleMap.put("/financial", new HashSet<>(Collections.singletonList("ADMIN")));
         uriRoleMap.put("/review", new HashSet<>(Arrays.asList("ADMIN", "CUSTOMER")));
         uriRoleMap.put("/ingredient", new HashSet<>(Collections.singletonList("ADMIN")));
+        uriRoleMap.put("/comment", new HashSet<>(Arrays.asList("ADMIN", "CUSTOMER")));
     }
 
     public AuthTokenFilter(UserDetailsService userDetailsService, JwtUtils jwtUtils) {
