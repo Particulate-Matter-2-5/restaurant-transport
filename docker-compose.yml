@@ -1,0 +1,16 @@
+name: restaurant
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: pm-mysql
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: sa2
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # SQL initialization script

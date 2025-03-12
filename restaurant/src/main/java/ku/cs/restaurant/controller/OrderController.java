@@ -174,6 +174,21 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/order/{id}/order")
+    public ResponseEntity<ApiResponse<Order>> getOrderByOrderId(@PathVariable("id") UUID id) {
+        try {
+            Order order = orderService.findOrderById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+            return ResponseEntity.ok(new ApiResponse<>(true, "Order fetched successfully.", order));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), null));
+        }
+    }
+
     @GetMapping("/order/{id}/food")
     public ResponseEntity<ApiResponse<FoodListDto>> getFoodByOrderId(@PathVariable("id") UUID id) {
         try {

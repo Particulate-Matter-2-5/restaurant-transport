@@ -18,6 +18,11 @@ const receiptApi = {
             headers: { 'Content-Type': 'application/json' },
         })
     },
+    getOrderById(id) {
+        return apiClient.get(`/order/${id}/order`, {
+            headers: { 'Content-Type': 'application/json' },
+        })
+    },
 }
 
 export default receiptApi

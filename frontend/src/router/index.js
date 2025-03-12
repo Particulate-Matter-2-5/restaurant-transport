@@ -1,78 +1,121 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SignupView from '@/views/SignupView.vue'
-import SigninView from '@/views/SigninView.vue'
-import FoodView from '@/views/FoodView.vue'
-import OrderView from '@/views/OrderView.vue'
-import IngredientView from '@/views/IngredientView.vue'
-import ReceiptView from '@/views/ReceiptView.vue'
-import DashboardView from '@/views/DashboardView.vue'
-import CartView from '@/views/CartView.vue'
-import SuccessView from '@/views/SuccessView.vue'
-import CancelView from '@/views/CancelView.vue'
-import AddIngredientsView from '@/views/AddIngredientsView.vue'
-import AddFoodView from '@/views/AddFoodView.vue'
-import authApi from '@/api/authApi'
+import userApi from '../api/userApi'
 
 const routes = [
     {
+        path: '/',
+        name: 'home',
+        beforeEnter: async (__, _, next) => {
+            try {
+                const role = await getUserRole()
+                if (role === 'COOK') {
+                    next({ name: 'orderforcook' })
+                } else if (role === 'RIDER') {
+                    next({ name: 'orderforrider'})
+                } else {
+                    next({ name: 'food' })
+                }
+            } catch (error) {
+                console.error('Error getting user role:', error)
+                console.error("---------", role)
+                next({ name: 'signin' })
+            }
+        },
+    },
+    {
         path: '/signup',
         name: 'signup',
-        component: SignupView,
+        component: () => import('@/views/auth/SignupView.vue'),
     },
     {
         path: '/signin',
         name: 'signin',
-        component: SigninView,
+        component: () => import('@/views/auth/SigninView.vue'),
     },
     {
         path: '/food',
         name: 'food',
-        component: FoodView,
+        component: () => import('@/views/foods/FoodView.vue'),
     },
     {
         path: '/order',
         name: 'order',
-        component: OrderView,
+        component: () => import('@/views/orders/OrderView.vue'),
+    },
+    {
+        path: '/orderforcook',
+        name: 'orderforcook',
+        component: () => import('@/views/orders/OrderCookView.vue'),
+    },
+    {
+        path: '/orderforrider',
+        name: 'orderforrider',
+        component: () => import('@/views/orders/OrderRiderView.vue'),
+    },
+    {
+        path: '/orderhistory',
+        name: 'orderhistory',
+        component: () => import('@/views/orders/OrderHistoryView.vue'),
     },
     {
         path: '/ingredient',
         name: 'ingredient',
-        component: IngredientView,
+        component: () => import('@/views/ingredients/IngredientView.vue'),
     },
     {
         path: '/receipt/:id',
         name: 'receipt',
-        component: ReceiptView,
+        component: () => import('@/views/ReceiptView.vue'),
+    },
+    {
+        path: '/receiptforcook/:id',
+        name: 'receiptforcook',
+        component: () => import('@/views/orders/OrderCookRecipeView.vue'),
     },
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: DashboardView,
+        component: () => import('@/views/DashboardView.vue'),
     },
     {
         path: '/cart',
         name: 'cart',
-        component: CartView,
+        component: () => import('@/views/CartView.vue'),
     },
     {
         path: '/payment/success',
         name: 'success',
-        component: SuccessView,
+        component: () => import('@/views/payments/SuccessView.vue'),
     },
     {
         path: '/payment/fail',
         name: 'fail',
-        component: CancelView,
+        component: () => import('@/views/payments/CancelView.vue'),
     },
     {
         path: '/addingredients',
         name: 'addingredients',
-        component: AddIngredientsView,
+        component: () => import('@/views/ingredients/AddIngredientsView.vue'),
     },
     {
         path: '/addfood',
         name: 'addfood',
-        component: AddFoodView,
+        component: () => import('@/views/foods/AddFoodView.vue'),
+    },
+    {
+        path: '/:pathMatch(.*)*', // Catch-all for undefined routes
+        name: 'notFound',
+        component: () => import('@/views/NotFound.vue'),
+    },
+    {
+        path: '/order/:id/review',
+        name: 'ReviewView',
+        component: () => import('@/views/reviews/ReviewView.vue'),
+    },
+    {
+        path: '/reviewlistview',
+        name: 'ReviewListView',
+        component: () => import('@/views/reviews/ReviewListView.vue'),
     },
 ]
 
@@ -81,34 +124,54 @@ const router = createRouter({
     routes,
 })
 
-// navigation guard
-router.beforeEach(async (to, from, next) => {
+/**
+ * @param {string} token
+ * @returns {number} token expiration time in milliseconds
+ */
+const decodeToken = (token) => {
     try {
-        // Allow navigation to 'signin' and 'signup' routes without token validation
-        if (to.name === 'signin' || to.name === 'signup') {
+        const payload = JSON.parse(atob(token.split('.')[1]))
+        return payload.exp * 1000
+    } catch (error) {
+        console.error('Error decoding token:', error)
+        return 0
+    }
+}
+
+// Get user role from the server
+const getUserRole = async () => {
+    const { data: res } = await userApi.getUserByJwt()
+    return res.data.role
+}
+
+// Navigation guard
+router.beforeEach(async (to, _, next) => {
+    try {
+        // Skip token validation for sign-in and sign-up pages
+        if (['signin', 'signup'].includes(to.name)) {
             next()
             return
         }
 
         const token = localStorage.getItem('token')
 
-        // Check if the token exists
+        // If no token, redirect to sign-in page
         if (!token) {
             return next({ name: 'signin' })
         }
 
-        const { data: response } = await authApi.validateToken(token)
+        const tokenExpiry = decodeToken(token)
 
-        const isAuthenticated = response.success
-
-        // Redirect to 'signin' if the token is not valid
-        if (!isAuthenticated) {
+        // If token has expired, remove it and redirect to sign-in page
+        if (tokenExpiry < Date.now()) {
+            localStorage.removeItem('token')
             return next({ name: 'signin' })
         }
 
         next()
     } catch (error) {
         console.error('Error validating token:', error)
+        localStorage.removeItem('token')
         next({ name: 'signin' })
     }
 })
