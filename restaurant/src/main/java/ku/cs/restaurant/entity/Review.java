@@ -42,4 +42,8 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Comment> comments;
 }

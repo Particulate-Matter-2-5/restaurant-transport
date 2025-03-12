@@ -1,19 +1,23 @@
 package ku.cs.restaurant.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+        import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @Entity
+@Table(name = "comment")
 public class Comment {
-
-    @EmbeddedId
-    private CommentKey id;
+    @Id
+    @GeneratedValue
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private UUID commentId;
 
     @Column
     private String comment;
@@ -21,14 +25,15 @@ public class Comment {
     @Column
     private LocalDateTime commentAt = LocalDateTime.now();
 
-    @ManyToOne
-    @MapsId("reviewId")
-    @JoinColumn(name = "review_id")
-    private Review review;
+//    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<ReviewComment> reviewComments;
 
     @ManyToOne
-    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "review_id", nullable = false)
+    private Review review;
 }

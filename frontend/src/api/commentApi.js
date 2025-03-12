@@ -1,9 +1,8 @@
 import apiClient from './index'
 
 const commentApi = {
-    
-    getComments() {
-        return apiClient.get('/comment/${reviewId}', {
+    getCommentsByReview(reviewId) {
+        return apiClient.get(`/comment/${reviewId}`, {
             headers: { 'Content-Type': 'application/json' },
         })
     },
@@ -12,8 +11,7 @@ const commentApi = {
         return apiClient.post('/comment', comment, {
             headers: { 'Content-Type': 'application/json' },
         })
-    }
-    
+    },
 }
 
 export default commentApi

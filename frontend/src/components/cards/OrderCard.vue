@@ -66,17 +66,25 @@
                     v-if="order.status === 'COOKING' && role === 'COOK'"
                     class="inline-block w-70 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
+                    @click="markOrderReady(order.id)"
+                >
+                    Mark as Ready
+                </button>
+                <button
+                    v-if="order.status === 'READY' && role === 'RIDER'"
+                    class="inline-block w-70 px-10 py-2 mt-2 mr-10 rounded-lg"
+                    style="background-color: #bcf14a; color: #000000"
                     @click="markOrderDelivering(order.id)"
                 >
                     Mark as Delivering
                 </button>
                 <button
                     v-if="order.status === 'DELIVERING' && role === 'RIDER'"
-                    class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg"
+                    class="inline-block w-56 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
                     @click="markOrderDelivered(order.id)"
                 >
-                    Mark as Success
+                    Mark as Delivered
                 </button>
                 <button
                     v-if="order.status === 'PENDING'"
@@ -127,6 +135,7 @@ const props = defineProps({
 const emit = defineEmits([
     'mark-success',
     'mark-cooking',
+    'mark-ready',
     'view-detail',
     'show-recipe',
     'mark-delivering',
@@ -162,6 +171,7 @@ const markOrderDelivering = async (id) => {
         console.error('Error marking order as delivering:', error)
     }
 }
+
 const markOrderDelivered = async (id) => {
     try {
         await orderApi.updateOrderStatus({ id, status: 'DELIVERED' })
@@ -169,6 +179,16 @@ const markOrderDelivered = async (id) => {
         window.location.reload()
     } catch (error) {
         console.error('Error marking order as delivered:', error)
+    }
+}
+
+const markOrderReady = async (id) => {
+    try {
+        await orderApi.updateOrderStatus({ id, status: 'READY' })
+        emit('mark-ready', id)
+        window.location.reload()
+    } catch (error) {
+        console.error('Error marking order as ready:', error)
     }
 }
 
