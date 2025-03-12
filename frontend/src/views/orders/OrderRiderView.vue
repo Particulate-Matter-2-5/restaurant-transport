@@ -47,7 +47,9 @@ onMounted(() => {
 
 const filteredOrders = computed(() => {
     return orders.value.filter((order) => {
-        const matchesStatus = role.value === 'RIDER' && order.status === 'DELIVERING'
+        const matchesStatus =
+            role.value === 'RIDER' &&
+            (order.status === 'READY' || order.status === 'DELIVERING')
         const matchesSearch = searchQuery.value
             ? order.user.toLowerCase().includes(searchQuery.value.toLowerCase())
             : true
@@ -70,8 +72,6 @@ const handleOrderDelivered = async (orderId) => {
 const handleViewDetail = (orderId) => {
     router.push({ name: 'receipt', params: { id: orderId } })
 }
-
-
 </script>
 
 <template>
@@ -101,5 +101,4 @@ const handleViewDetail = (orderId) => {
             </section>
         </main>
     </div>
-
 </template>

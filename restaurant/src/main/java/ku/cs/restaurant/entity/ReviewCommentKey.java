@@ -17,12 +17,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class CommentKey implements Serializable {
+public class ReviewCommentKey implements Serializable {
     @Column(name = "review_id")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID reviewId;
 
-    @Column(name = "user_id")
+    @Column(name = "comment_id")
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID userId;
+    private UUID commentId;
 }

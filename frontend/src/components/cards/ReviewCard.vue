@@ -10,8 +10,10 @@
                     icon="heart"
                     @click="handleLike"
                 />
-                <button 
-                    v-if="loginUserId === review.customer.id || role === 'ADMIN'"
+                <button
+                    v-if="
+                        loginUserId === review.customer.id || role === 'ADMIN'
+                    "
                     class="bg-red-500 text-white px-2 py-1 rounded-md"
                     @click="deleteReview(review.id)"
                 >
@@ -22,7 +24,11 @@
         <p>Customer Name: {{ review.customer.username }}</p>
         <p>
             Review Date:
-            {{ review.createdAt.split('T')[0] + ' | ' + review.createdAt.split('T')[1].slice(0, 5) }}
+            {{
+                review.createdAt.split('T')[0] +
+                ' | ' +
+                review.createdAt.split('T')[1].slice(0, 5)
+            }}
         </p>
         <fa
             v-for="i in 5"
@@ -31,25 +37,49 @@
             :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'"
             class="text-lg"
         />
-        <p class="bg-gray-200 py-4 px-2 rounded-md h-fit">{{ review.comment }}</p>
+        <p class="bg-gray-200 py-4 px-2 rounded-md h-fit">
+            {{ review.comment }}
+        </p>
 
         <!-- Comment Section Toggle -->
-        <button @click="showComments = !showComments" class="mt-4 w-full text-left text-blue-600 font-bold">
-            {{ showComments ? 'Hide Comments' : `View Comments (${comments.length})` }}
+        <button
+            @click="showComments = !showComments"
+            class="mt-4 w-full text-left text-blue-600 font-bold"
+        >
+            {{
+                showComments
+                    ? 'Hide Comments'
+                    : `View Comments (${comments.length})`
+            }}
         </button>
 
         <!-- Comment Section -->
         <transition name="fade">
             <div v-if="showComments" class="mt-2 border-t pt-2">
                 <h3 class="text-lg font-bold">Comments</h3>
-                <div v-for="comment in comments" :key="comment.id" class="bg-gray-100 p-2 my-2 rounded">
+                <div
+                    v-for="comment in comments"
+                    :key="comment.id"
+                    class="bg-gray-100 p-2 my-2 rounded"
+                >
                     <p class="font-semibold">{{ comment.user.username }}:</p>
                     <p>{{ comment.comment }}</p>
-                    <p class="text-sm text-gray-500">{{ formatDate(comment.commentAt) }}</p>
+                    <p class="text-sm text-gray-500">
+                        {{ formatDate(comment.commentAt) }}
+                    </p>
                 </div>
                 <div class="mt-2 flex gap-2">
-                    <input v-model="newComment" placeholder="Write a comment..." class="border rounded p-2 w-full" />
-                    <button @click="addComment" class="bg-blue-500 text-white px-4 py-2 rounded">Post</button>
+                    <input
+                        v-model="newComment"
+                        placeholder="Write a comment..."
+                        class="border rounded p-2 w-full"
+                    />
+                    <button
+                        @click="addComment"
+                        class="bg-blue-500 text-white px-4 py-2 rounded"
+                    >
+                        Post
+                    </button>
                 </div>
             </div>
         </transition>
@@ -69,7 +99,7 @@ const loginUserId = ref<string>('')
 const role = ref<string>('')
 const comments = ref([])
 const newComment = ref<string>('')
-const showComments = ref<boolean>(false)  // Toggle state for dropdown
+const showComments = ref<boolean>(false) // Toggle state for dropdown
 
 const checkIsLiked = async () => {
     try {
@@ -79,7 +109,7 @@ const checkIsLiked = async () => {
             userId: user.data.id,
         })
         isLiked.value = res.data.liked
-        loginUserId.value = user.data.id 
+        loginUserId.value = user.data.id
         role.value = user.data.role
     } catch (error) {
         console.error('Error checking like status:', error)
@@ -88,8 +118,10 @@ const checkIsLiked = async () => {
 
 const fetchComments = async () => {
     try {
-        const { data } = await commentApi.getCommentsByReview(props.review.id)
-        comments.value = data
+        const { data: res } = await commentApi.getCommentsByReview(
+            props.review.id
+        )
+        comments.value = res.data
     } catch (error) {
         console.error('Error fetching comments:', error)
     }
@@ -155,10 +187,12 @@ onMounted(() => {
     color: grey;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
     transition: opacity 0.3s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
     opacity: 0;
 }
 </style>

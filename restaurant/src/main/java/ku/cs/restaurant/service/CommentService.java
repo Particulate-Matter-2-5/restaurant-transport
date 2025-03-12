@@ -1,39 +1,33 @@
 package ku.cs.restaurant.service;
 
 import ku.cs.restaurant.dto.CommentDTO;
-import ku.cs.restaurant.entity.Comment;
-import ku.cs.restaurant.entity.CommentKey;
-import ku.cs.restaurant.entity.Review;
-import ku.cs.restaurant.entity.User;
+import ku.cs.restaurant.entity.*;
 import ku.cs.restaurant.repository.CommentRepository;
+import ku.cs.restaurant.repository.ReviewCommentRepository;
 import ku.cs.restaurant.repository.ReviewRepository;
 import ku.cs.restaurant.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
-
-    public CommentService(CommentRepository commentRepository, ReviewRepository reviewRepository, UserRepository userRepository) {
-        this.commentRepository = commentRepository;
-        this.reviewRepository = reviewRepository;
-        this.userRepository = userRepository;
-    }
+    private final ReviewCommentRepository reviewCommentRepository;
 
     public List<Comment> getComments() {
         return commentRepository.findAll();
     }
 
-    public Optional<Comment> getComment(UUID id) {
-        return commentRepository.findById(id);
-    }
-
+    @Transactional
     public Comment addComment(CommentDTO commentDTO) {
         UUID reviewId = commentDTO.getReviewId();
         UUID userId = commentDTO.getUserId();
@@ -45,16 +39,23 @@ public class CommentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Create CommentKey
-        CommentKey commentKey = new CommentKey(reviewId, userId);
-
         // Construct Comment object
         Comment comment = new Comment();
-        comment.setId(commentKey);
         comment.setComment(commentDTO.getComment());
-        comment.setReview(review);
         comment.setUser(user);
+        comment.setReview(review);
 
-        return commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
+
+        // map to reviewComment tables
+        ReviewCommentKey key = new ReviewCommentKey(reviewId, savedComment.getCommentId());
+        ReviewComment reviewComment = new ReviewComment();
+        reviewComment.setComment(comment);
+        reviewComment.setReview(review);
+        reviewComment.setKey(key);
+
+        reviewCommentRepository.save(reviewComment);
+
+        return comment;
     }
 }
