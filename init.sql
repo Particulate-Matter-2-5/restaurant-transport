@@ -103,6 +103,28 @@ CREATE TABLE IF NOT EXISTS `liked_by` (
   CONSTRAINT `FKo6qhypgn2bf8gqis41ebg0nl1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS `comment` (
+  `comment_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `comment` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `comment_at` datetime(6) DEFAULT NULL,
+  `review_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(36) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`comment_id`),
+  KEY `FKnf4ni761w29tmtgdxymmgvg8r` (`review_id`),
+  KEY `FK8kcum44fvpupyw6f5baccx25c` (`user_id`),
+  CONSTRAINT `FK8kcum44fvpupyw6f5baccx25c` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  CONSTRAINT `FKnf4ni761w29tmtgdxymmgvg8r` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `review_comment` (
+  `comment_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `review_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`comment_id`,`review_id`),
+  KEY `FK9j7pkcpuestrwjre1a1902biu` (`review_id`),
+  CONSTRAINT `FK9j7pkcpuestrwjre1a1902biu` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`),
+  CONSTRAINT `FKpljpgtuaj54qaod48639ekslo` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`comment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 /* ---- INSERT ---- */
 
 DELETE FROM `user`;
@@ -231,5 +253,3 @@ INSERT INTO `financial` (`date`, `expense`, `income`, `total`) VALUES
 	('2024-10-30', 8805, 790, -8015),
 	('2024-11-05', 11495, 185, -11310),
 	('2025-02-05', 5085, 200, -4885);
-
-
