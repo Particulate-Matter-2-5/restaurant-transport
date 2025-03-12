@@ -43,15 +43,17 @@ const selectOption = (option) => {
 }
 
 const filteredReviews = computed(() => {
-    return reviews.value.filter((review) => {
-        const matchesStatus = selectedOption.value === 'All Review'
-        const matchesSearch = searchQuery.value
-            ? review.comment
-                  .toLowerCase()
-                  .includes(searchQuery.value.toLowerCase())
-            : true
-        return matchesStatus && matchesSearch
-    })
+    return reviews.value
+        .filter((review) => {
+            const matchesStatus = selectedOption.value === 'All Review'
+            const matchesSearch = searchQuery.value
+                ? review.comment
+                      .toLowerCase()
+                      .includes(searchQuery.value.toLowerCase())
+                : true
+            return matchesStatus && matchesSearch
+        })
+        .sort((a, b) => b.likeCount - a.likeCount)
 })
 
 const handleViewDetail = (reviewId) => {
