@@ -1,56 +1,88 @@
-# ผู้พัฒนา
+# 🚀 Restaurant Transport
 
-1. ยศวัจน์ บวรศรีธนนนท์ 6510450879
-2. ปริยวิศว์ เตชะกฤตเมธีธำรง 6510450593
-3. ภูรี ลิ้มวงศ์รุจิรัตน์ 6510450844
-4. ...
-5. ...
+A restaurant management system for food ordering and delivery.
 
-# การติดตั้ง
+---
 
-## Download Project
+## 👑 Project Manager
 
-```
+- **ภูเบศ สิริเมธาวุฒิ** (6510450810)
+
+## 📊 System Analyst
+
+- **อภิญญา ลิ้มฮวบ** (6510451077)
+
+## 💼 Business Analyst
+
+- **พศิน เจียระศิริสิน** (6510450712)
+
+## 👨‍💻 Developers
+
+- **ยศวัจน์ บวรศรีธนนนท์** (6510450879)
+- **ปริยวิศว์ เตชะกฤตเมธีธำรง** (6510450593)
+- **ภูรี ลิ้มวงศ์รุจิรัตน์** (6510450844)
+- **ภัควัฒน์ ปานกลาง** (6510450763)
+- **ปริยานุช มั่งคั่ง** (6510450607)
+
+---
+
+## 📥 Installation
+
+### 1️⃣ Clone the Repository
+
+```sh
 git clone https://github.com/Particulate-Matter-2-5/restaurant-transport.git
 ```
 
-## Frontend
+---
 
-### Project Setup
+## 🎨 Frontend
 
-```bash
+### 🔧 Project Setup
+
+```sh
 cd frontend
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 🚀 Run in Development Mode
 
-```bash
+```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### 📦 Build for Production
 
-```bash
+```sh
 npm run build
 ```
 
-## Backend
+---
 
-ในส่วน Backend (restaurant) ติดตั้ง JDK Version 21
+## 🛠️ Backend
 
-- Database Name: sa2
-- Backend Port: 8088
-- For admin, manually change role in database user_role = 'ADMIN'
-- สร้าง `.env` ใน restaurant/src/main/resources/
+### 📌 Prerequisites
 
-```bash
+- Install **JDK 21**
+- Database Name: `sa2`
+- Backend Port: `8088`
+- To assign admin role, manually set `user_role = 'ADMIN'` in the database.
+
+### 📝 Environment Variables
+
+Create a `.env` file in `restaurant/src/main/resources/` with the following content:
+
+```sh
 STRIPE_TEST_KEY=sk_test_51Q6VTPBb2nJBY3WlwqNj5Uu2qphozXdNlD8AREPgcMYoFmDlMV7lNmgqBSjOxJKM7mWZ6uvVQR8DUbHFQcWomM2i009gCYwWNX
 JWT_TEST_KEY=ffc0d02ab13cf1b58ac77b6165b17d6654837e8c845e197774754a0efd375560
 ```
 
-### Run
+### 🚀 Run Backend
 
-```bash
+```sh
 mvn spring-boot:run
 ```
+
+---
+
+✅ **Now your system is ready to go!** 🚀
