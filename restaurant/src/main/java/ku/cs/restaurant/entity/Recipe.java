@@ -10,7 +10,7 @@ public class Recipe {
     private RecipeKey id;
 
     @Column(name = "qty")
-    private int qty;
+    private double qty;
 
     @ManyToOne
     @MapsId("ingredientId")
