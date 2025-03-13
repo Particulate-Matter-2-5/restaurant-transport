@@ -43,7 +43,6 @@ const submitHandler = async () => {
         const { data: response } = await ingredientApi.updateIngredient({
             id: selectedIngredient.value.id,
             qty: selectedIngredient.value.qty,
-            unit: selectedIngredient.value.unit,
         })
         console.log('Ingredient updated:', response.data)
 
