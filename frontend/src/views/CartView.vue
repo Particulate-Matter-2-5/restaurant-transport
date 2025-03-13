@@ -4,12 +4,6 @@
         <div class="ml-[14rem] p-5">
             <div class="flex justify-between items-center">
                 <h1 class="font-bold text-lg">Your Cart</h1>
-                <button
-                    class="bg-yellow-300 px-6 py-2 rounded-md hover:shadow-md duration-200"
-                    @click="createOrder"
-                >
-                    Order
-                </button>
             </div>
             <div v-if="cart.length === 0" class="mt-4">
                 <p>Your cart is empty.</p>
@@ -51,8 +45,16 @@
                     </div>
                 </li>
             </ul>
-            <div class="mt-4 font-bold">
-                <h2>Total: {{ total + total * 0.07 }} ฿</h2>
+            <div class="flex gap-4 items-center mt-4">
+                <div class="font-bold">
+                    <h2>Total: {{ total + total * 0.07 }} ฿</h2>
+                </div>
+                <button
+                    class="bg-yellow-300 px-10 py-2 rounded-md hover:shadow-md duration-200"
+                    @click="createOrder"
+                >
+                    Order
+                </button>
             </div>
         </div>
     </main>

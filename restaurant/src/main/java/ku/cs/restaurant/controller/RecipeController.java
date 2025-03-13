@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class RecipeController {
@@ -70,5 +71,10 @@ public class RecipeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(false, "Recipe not found.", null));
         }
+    }
+
+    @GetMapping("recipe/{foodId}")
+    public ResponseEntity<ApiResponse<List<Recipe>>> getByRecipe(@PathVariable UUID foodId) {
+        return ResponseEntity.ok(new ApiResponse<>(true, "Recipes retrieved successfully.", recipeService.getRecipeByFoodId(foodId)));
     }
 }

@@ -4,15 +4,29 @@ import receiptApi from '@/api/receiptApi'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import userApi from '@/api/userApi'
+import orderApi from '@/api/orderApi'
 
 const b_total = ref('')
 const b_id = ref('')
 const created_at = ref('')
 const username = ref('')
 const foodList = ref([])
+const role = ref('')
+const orderStatus = ref('')
 
 const goBack = () => {
-    router.push('/order')
+    console.log("ROLE: ", role.value)
+    if (role.value === 'RIDER') {
+        console.log("Order status: ", orderStatus.value)
+        if (orderStatus.value === 'SUCCESS') {
+            router.push('/orderhistory')  
+        } else {
+            router.push('/orderforrider')   
+        }
+    } else {
+        router.push('/order')
+    }
 }
 
 onMounted(async () => {
@@ -21,18 +35,24 @@ onMounted(async () => {
         const { data: responseOrder } = await receiptApi.getReceiptById(
             route.params.id
         )
+        const { data: responseOrder1 } = await receiptApi.getOrderById(
+            route.params.id
+        )
         const { data: responseUser } = await receiptApi.getUserById(
             route.params.id
         )
         const { data: responseFood } = await receiptApi.getFoodById(
             route.params.id
         )
+        const { data: userResponse } = await userApi.getUserByJwt()
 
+        role.value = userResponse.data.role
         b_total.value = responseOrder.data.total
         b_id.value = responseOrder.data.id
         created_at.value = responseOrder.data.createdAt
         username.value = responseUser.data.username
         foodList.value = responseFood.data.foods
+        orderStatus.value = responseOrder1.data.status
     } catch (error) {
         console.error('Error fetching receipt:', error)
     }
