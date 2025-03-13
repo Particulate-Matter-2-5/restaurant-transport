@@ -26,14 +26,14 @@ public class Ingredient {
     @Column(name = "i_name")
     private String name;
 
-    @Column(name = "i_price")
+    @Column(name = "i_price", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double price;
 
     @Column(name = "i_status")
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "i_qty")
+    @Column(name = "i_qty", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double qty;
 
     @Enumerated(EnumType.STRING)

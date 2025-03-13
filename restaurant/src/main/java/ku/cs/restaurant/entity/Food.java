@@ -26,7 +26,7 @@ public class Food {
     @Column(name = "f_name")
     private String name;
 
-    @Column(name = "f_price")
+    @Column(name = "f_price", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double price;
 
     @Enumerated(EnumType.STRING)

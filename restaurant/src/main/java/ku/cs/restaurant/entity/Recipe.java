@@ -9,7 +9,7 @@ public class Recipe {
     @EmbeddedId
     private RecipeKey id;
 
-    @Column(name = "qty")
+    @Column(name = "qty", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double qty;
 
     @ManyToOne

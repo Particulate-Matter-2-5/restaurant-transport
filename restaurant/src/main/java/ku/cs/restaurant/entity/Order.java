@@ -21,7 +21,7 @@ public class Order {
     @Column(name = "o_id", length=36)
     private UUID id;
 
-    @Column(name = "o_total", nullable = false)
+    @Column(name = "o_total", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double total;
 
     @Column(name = "o_status", nullable = false)
