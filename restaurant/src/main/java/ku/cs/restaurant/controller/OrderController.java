@@ -254,7 +254,7 @@ public class OrderController {
         Order order = orderService.findOrderById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.getStatus().equals(OrderStatus.COMPLETE)) return;
+        if (order.getStatus().equals(OrderStatus.COOKING)) return;
 
         CreateFinancialRequest req = new CreateFinancialRequest();
         Optional<Order> existOrder = orderService.findOrderById(id);
