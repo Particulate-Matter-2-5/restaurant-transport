@@ -31,7 +31,10 @@ import { onMounted, ref } from 'vue'
 // Helper function to check if the ingredient is expired
 const isExpired = (date) => {
     const today = new Date()
-    const expireDate = new Date(date)
+
+    const [day, month, year] = date.split('-')
+    const expireDate = new Date(year, month - 1, day)
+
     console.log(today, expireDate)
     return expireDate < today
 }
